@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="설정" />
+    <SwitchPreference
+        android:key="alarm"
+        android:title="일기 작성 시간 알림" />
+    <SwitchPreference
+        android:key="password"
+        android:title="비밀번호 설정" />
+    <ListPreference
+        android:entries="@array/array_font"
+        android:entryValues="@array/array_font"
+        android:key="font_list"
+        android:summary="기본"
+        android:title="글씨체" />
+</PreferenceScreen>

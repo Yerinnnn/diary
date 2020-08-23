@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="array_font">
+        <item>기본</item>
+        <item>고딕체</item>
+        <item>글씨체1</item>
+        <item>글씨체2</item>
+        <item>글씨체3</item>
+    </string-array>
+</resources>

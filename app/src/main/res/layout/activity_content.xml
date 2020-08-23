@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="25dp"
+    android:background="@drawable/border_layout"
+    android:orientation="vertical"
+    android:padding="35dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/diaryYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="2020"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="년 "
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:id="@+id/diaryMonth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="5"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="월 "
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:id="@+id/diaryDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="24"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="일 "
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:id="@+id/diaryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="일"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="요일 "
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:id="@+id/diaryEmotion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="행복해"
+                android:textColor="@color/textPrimary" />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/diaryEmoji"
+            android:layout_gravity="center"
+            android:src="@drawable/ubu"
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_margin="5dp" />
+
+
+        <TextView
+            android:id="@+id/diaryContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/a_cinema_light"
+            android:gravity="center"
+            android:lineSpacingExtra="8dp"
+            android:text="오늘은 너무 행복한 하루였다.\n예빈이랑 치킨도 시켜먹고\n
+같이 영화도 봤다.\n매일 매일이 이랬으면 좋겠다 :)"
+            android:textColor="@color/textPrimary"
+            android:textSize="18sp" />
+
+
+        <ImageView
+            android:id="@+id/diaryPhoto"
+            android:background="@drawable/border_layout"
+            android:layout_gravity="center"
+            android:src="@drawable/ubu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

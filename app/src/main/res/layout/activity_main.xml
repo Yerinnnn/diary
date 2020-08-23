@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/diarySetDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:scale_base_height="2960"
+            app:scale_base_width="1440">
+
+            <TextView
+                android:id="@+id/diaryYear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="2020"
+                android:gravity="center"
+                app:scale_height="110"
+                app:scale_left="490"
+                app:scale_top="100"
+                app:scale_width="180"
+                app:scale_textsize="80"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="년 "
+                android:gravity="center"
+                app:scale_height="110"
+                app:scale_left="670"
+                app:scale_top="100"
+                app:scale_width="80"
+                app:scale_textsize="80"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:id="@+id/diaryMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="5"
+                android:gravity="center"
+                app:scale_height="110"
+                app:scale_left="750"
+                app:scale_top="100"
+                app:scale_width="90"
+                app:scale_textsize="80"
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:layout_width="75dp"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/a_cinema_light"
+                android:text="월 "
+                android:gravity="center"
+                app:scale_height="110"
+                app:scale_left="840"
+                app:scale_top="100"
+                app:scale_width="80"
+                app:scale_textsize="80"
+                android:textColor="@color/textPrimary" />
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <com.ssomai.android.scalablelayout.ScalableLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:scale_base_height="2960"
+            app:scale_base_width="1440">
+
+            <Button
+                android:id="@+id/btnSetting"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_settings_black_24dp"
+                app:scale_height="110"
+                app:scale_left="0"
+                app:scale_top="100"
+                app:scale_width="110" />
+
+            <Button
+                android:id="@+id/btnAsc"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_settings_black_24dp"
+                app:scale_height="110"
+                app:scale_left="1180"
+                app:scale_top="100"
+                app:scale_width="110" />
+
+            <Button
+                android:id="@+id/btnDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/ic_equalizer_black_24dp"
+                app:scale_height="110"
+                app:scale_left="1330"
+                app:scale_top="100"
+                app:scale_width="110" />
+
+
+            <TextView
+                android:id="@+id/firstMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="60sp"
+                android:fontFamily="@font/a_cinema_light"
+                android:lineSpacingExtra="8dp"
+                android:text="아직 작성된 일기가 없습니다.\n오늘 하루의 이야기를 남겨보세요 :)"
+                android:textColor="@color/textPrimary"
+                android:textSize="20sp"
+                app:scale_height="200"
+                app:scale_left="0"
+                app:scale_textsize="60"
+                app:scale_top="250"
+                app:scale_width="800" />
+
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/diaryRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btnAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:layout_margin="40dp" />
+
+</FrameLayout>
