@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,7 @@ public class AddActivity extends Activity {
     private LinearLayout diarySetDate;
     private TextView diaryYear, diaryMonth, diaryDay, diaryDate;
     private RadioGroup emotionRadioGroup1, emotionRadioGroup2;
+    private RadioButton btnSmile, btnSoso, btnAngry, btnHappy, btnRelax, btnSad;
     private ImageView diaryEmoji, diaryPhoto;
     private EditText diaryContent;
     private Button btnBack, btnSave;
@@ -91,6 +93,13 @@ public class AddActivity extends Activity {
 
         emotionRadioGroup1 = findViewById(R.id.emotionRadioGroup1);
         emotionRadioGroup2 = findViewById(R.id.emotionRadioGroup2);
+
+        btnSmile = findViewById(R.id.btn_smile);
+        btnSoso = findViewById(R.id.btn_soso);
+        btnAngry = findViewById(R.id.btn_angry);
+        btnHappy = findViewById(R.id.btn_happy);
+        btnRelax = findViewById(R.id.btn_relax);
+        btnSad = findViewById(R.id.btn_sad);
 
         btnBack = findViewById(R.id.btnBack);
         btnSave = findViewById(R.id.btnSave);
@@ -184,8 +193,39 @@ public class AddActivity extends Activity {
                     isEmotionChecking = false;
                     emotionRadioGroup2.clearCheck();
                     emotionCheckedId = checkedId;
+
+//                    if (emotionCheckedId == R.id.btn_smile) {
+//                        btnSmile.setTextSize(20);
+//                    } else if (emotionCheckedId == R.id.btn_soso) {
+//                        btnSoso.setTextSize(20);
+//                    } else if (emotionCheckedId == R.id.btn_angry) {
+//                        btnAngry.setTextSize(20);
+//                    }
                 }
                 isEmotionChecking = true;
+
+                if (emotionCheckedId == R.id.btn_smile) {
+                    btnSmile.setTextSize(20);
+                    btnSoso.setTextSize(15);
+                    btnAngry.setTextSize(15);
+                    btnHappy.setTextSize(15);
+                    btnRelax.setTextSize(15);
+                    btnSad.setTextSize(15);
+                } else if (emotionCheckedId == R.id.btn_soso) {
+                    btnSmile.setTextSize(15);
+                    btnSoso.setTextSize(20);
+                    btnAngry.setTextSize(15);
+                    btnHappy.setTextSize(15);
+                    btnRelax.setTextSize(15);
+                    btnSad.setTextSize(15);
+                } else if (emotionCheckedId == R.id.btn_angry) {
+                    btnSmile.setTextSize(15);
+                    btnSoso.setTextSize(15);
+                    btnAngry.setTextSize(20);
+                    btnHappy.setTextSize(15);
+                    btnRelax.setTextSize(15);
+                    btnSad.setTextSize(15);
+                }
             }
         });
 
@@ -196,10 +236,42 @@ public class AddActivity extends Activity {
                     isEmotionChecking = false;
                     emotionRadioGroup1.clearCheck();
                     emotionCheckedId = checkedId;
+
+//                    if (emotionCheckedId == R.id.btn_happy) {
+//                        btnHappy.setTextSize(20);
+//                    } else if (emotionCheckedId == R.id.btn_relax) {
+//                        btnRelax.setTextSize(20);
+//                    } else if (emotionCheckedId == R.id.btn_sad) {
+//                        btnSad.setTextSize(20);
+//                    }
                 }
                 isEmotionChecking = true;
+
+                if (emotionCheckedId == R.id.btn_happy) {
+                    btnSmile.setTextSize(15);
+                    btnSoso.setTextSize(15);
+                    btnAngry.setTextSize(15);
+                    btnHappy.setTextSize(20);
+                    btnRelax.setTextSize(15);
+                    btnSad.setTextSize(15);
+                } else if (emotionCheckedId == R.id.btn_relax) {
+                    btnSmile.setTextSize(15);
+                    btnSoso.setTextSize(15);
+                    btnAngry.setTextSize(15);
+                    btnHappy.setTextSize(15);
+                    btnRelax.setTextSize(20);
+                    btnSad.setTextSize(15);
+                } else if (emotionCheckedId == R.id.btn_sad) {
+                    btnSmile.setTextSize(15);
+                    btnSoso.setTextSize(15);
+                    btnAngry.setTextSize(15);
+                    btnHappy.setTextSize(15);
+                    btnRelax.setTextSize(15);
+                    btnSad.setTextSize(20);
+                }
             }
         });
+
 
         diaryEmoji.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -213,8 +285,8 @@ public class AddActivity extends Activity {
 
                 ViewGroup viewGroup = findViewById(android.R.id.content);
                 final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.custom_dialog, viewGroup, false);
-                dialogView.setMinimumWidth((int) (displayRectangle.width() * 1f));
-                dialogView.setMinimumHeight((int) (displayRectangle.height() * 1f));
+                dialogView.setMinimumWidth((int) (displayRectangle.width() * 1f - 50));
+                dialogView.setMinimumHeight((int) (displayRectangle.height() * 1f - 50));
 
                 builder.setView(dialogView);
 
@@ -235,24 +307,38 @@ public class AddActivity extends Activity {
                         diaryEmoji.setImageResource(imgs[position]);
 
                         switch (position) {
-                            case 0:
-                                dEmoji = 1;
-                                break;
-                            case 1:
-                                dEmoji = 2;
-                                break;
-                            case 2:
-                                dEmoji = 3;
-                                break;
-                            case 3:
-                                dEmoji = 4;
-                                break;
-                            case 4:
-                                dEmoji = 5;
-                                break;
-                            case 5:
-                                dEmoji = 6;
-                                break;
+                            case 0: dEmoji = 1; break;
+                            case 1: dEmoji = 2; break;
+                            case 2: dEmoji = 3; break;
+                            case 3: dEmoji = 4; break;
+                            case 4: dEmoji = 5; break;
+                            case 5: dEmoji = 6; break;
+                            case 6: dEmoji = 7; break;
+                            case 7: dEmoji = 8; break;
+                            case 8: dEmoji = 9; break;
+                            case 9: dEmoji = 10; break;
+                            case 10: dEmoji = 11; break;
+                            case 11: dEmoji = 12; break;
+                            case 12: dEmoji = 13; break;
+                            case 13: dEmoji = 14; break;
+                            case 14: dEmoji = 15; break;
+                            case 15: dEmoji = 16; break;
+                            case 16: dEmoji = 17; break;
+                            case 17: dEmoji = 18; break;
+                            case 18: dEmoji = 19; break;
+                            case 19: dEmoji = 20; break;
+                            case 20: dEmoji = 21; break;
+                            case 21: dEmoji = 22; break;
+                            case 22: dEmoji = 23; break;
+                            case 23: dEmoji = 24; break;
+                            case 24: dEmoji = 25; break;
+                            case 25: dEmoji = 26; break;
+                            case 26: dEmoji = 27; break;
+                            case 27: dEmoji = 28; break;
+                            case 28: dEmoji = 29; break;
+                            case 29: dEmoji = 30; break;
+                            case 30: dEmoji = 31; break;
+                            case 31: dEmoji = 32; break;
                         }
                     }
                 });

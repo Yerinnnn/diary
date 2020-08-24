@@ -43,14 +43,14 @@
                 android:id="@+id/btn_smile"
                 android:layout_weight="1"
                 android:text="좋아"
-                android:fontFamily="@font/a_cinema_light"
+                android:fontFamily="@font/barunhippie"
                 android:textColor="@color/textPrimary"
                 android:button="@null" />
             <RadioButton
                 android:id="@+id/btn_soso"
                 android:layout_weight="1"
                 android:text="그냥 그래"
-                android:fontFamily="@font/a_cinema_light"
+                android:fontFamily="@font/barunhippie"
                 android:textColor="@color/textPrimary"
                 android:button="@null" />
 
@@ -58,7 +58,7 @@
                 android:id="@+id/btn_angry"
                 android:layout_weight="1"
                 android:text="화나"
-                android:fontFamily="@font/a_cinema_light"
+                android:fontFamily="@font/barunhippie"
                 android:textColor="@color/textPrimary"
                 android:button="@null" />
         </RadioGroup>
@@ -74,7 +74,7 @@
                 android:id="@+id/btn_happy"
                 android:layout_weight="1"
                 android:text="행복해"
-                android:fontFamily="@font/a_cinema_light"
+                android:fontFamily="@font/barunhippie"
                 android:textColor="@color/textPrimary"
                 android:button="@null" />
 
@@ -82,7 +82,7 @@
                 android:id="@+id/btn_relax"
                 android:layout_weight="1"
                 android:text="편안해"
-                android:fontFamily="@font/a_cinema_light"
+                android:fontFamily="@font/barunhippie"
                 android:textColor="@color/textPrimary"
                 android:button="@null" />
 
@@ -90,7 +90,7 @@
                 android:id="@+id/btn_sad"
                 android:layout_weight="1"
                 android:text="슬퍼"
-                android:fontFamily="@font/a_cinema_light"
+                android:fontFamily="@font/barunhippie"
                 android:textColor="@color/textPrimary"
                 android:button="@null" />
         </RadioGroup>

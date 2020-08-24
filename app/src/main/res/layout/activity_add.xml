@@ -59,14 +59,14 @@
                         android:id="@+id/diaryYear"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/a_cinema_light"
+                        android:fontFamily="@font/barunhippie"
                         android:text="2020"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/a_cinema_light"
+                        android:fontFamily="@font/barunhippie"
                         android:text="년 "
                         android:textColor="@color/textPrimary" />
 
@@ -74,14 +74,14 @@
                         android:id="@+id/diaryMonth"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/a_cinema_light"
+                        android:fontFamily="@font/barunhippie"
                         android:text="5"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/a_cinema_light"
+                        android:fontFamily="@font/barunhippie"
                         android:text="월 "
                         android:textColor="@color/textPrimary" />
 
@@ -89,14 +89,14 @@
                         android:id="@+id/diaryDay"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/a_cinema_light"
+                        android:fontFamily="@font/barunhippie"
                         android:text="24"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/a_cinema_light"
+                        android:fontFamily="@font/barunhippie"
                         android:text="일 "
                         android:textColor="@color/textPrimary" />
 
@@ -104,14 +104,14 @@
                         android:id="@+id/diaryDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/a_cinema_light"
+                        android:fontFamily="@font/barunhippie"
                         android:text="일"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="@font/a_cinema_light"
+                        android:fontFamily="@font/barunhippie"
                         android:text="요일"
                         android:textColor="@color/textPrimary" />
                 </LinearLayout>
@@ -131,25 +131,31 @@
                             android:id="@+id/btn_smile"
                             android:layout_weight="1"
                             android:button="@null"
-                            android:fontFamily="@font/a_cinema_light"
+                            android:fontFamily="@font/barunhippie"
+                            android:gravity="center"
                             android:text="좋아"
-                            android:textColor="@color/textPrimary" />
+                            android:textColor="@color/color_good"
+                            android:textSize="15sp" />
 
                         <RadioButton
                             android:id="@+id/btn_soso"
                             android:layout_weight="1"
                             android:button="@null"
-                            android:fontFamily="@font/a_cinema_light"
+                            android:fontFamily="@font/barunhippie"
+                            android:gravity="center"
                             android:text="그냥 그래"
-                            android:textColor="@color/textPrimary" />
+                            android:textColor="@color/color_soso"
+                            android:textSize="15sp" />
 
                         <RadioButton
                             android:id="@+id/btn_angry"
                             android:layout_weight="1"
                             android:button="@null"
-                            android:fontFamily="@font/a_cinema_light"
+                            android:fontFamily="@font/barunhippie"
+                            android:gravity="center"
                             android:text="화나"
-                            android:textColor="@color/textPrimary" />
+                            android:textColor="@color/color_angry"
+                            android:textSize="15sp" />
                     </RadioGroup>
 
                     <RadioGroup
@@ -163,27 +169,32 @@
                             android:id="@+id/btn_happy"
                             android:layout_weight="1"
                             android:button="@null"
-                            android:fontFamily="@font/a_cinema_light"
+                            android:fontFamily="@font/barunhippie"
+                            android:gravity="center"
                             android:text="행복해"
-                            android:textColor="@color/textPrimary" />
+                            android:textColor="@color/color_happy"
+                            android:textSize="15sp" />
 
                         <RadioButton
                             android:id="@+id/btn_relax"
                             android:layout_weight="1"
                             android:button="@null"
-                            android:fontFamily="@font/a_cinema_light"
+                            android:fontFamily="@font/barunhippie"
+                            android:gravity="center"
                             android:text="편안해"
-                            android:textColor="@color/textPrimary" />
+                            android:textColor="@color/color_relax"
+                            android:textSize="15sp" />
 
                         <RadioButton
                             android:id="@+id/btn_sad"
-                            android:layout_width="103dp"
                             android:layout_height="match_parent"
                             android:layout_weight="1"
                             android:button="@null"
-                            android:fontFamily="@font/a_cinema_light"
+                            android:fontFamily="@font/barunhippie"
+                            android:gravity="center"
                             android:text="슬퍼"
-                            android:textColor="@color/textPrimary" />
+                            android:textColor="@color/color_sad"
+                            android:textSize="15sp" />
                     </RadioGroup>
                 </LinearLayout>
 
@@ -201,14 +212,14 @@
                 <EditText
                     android:id="@+id/diaryContent"
                     android:layout_width="match_parent"
-                    android:minHeight="200dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:background="@drawable/border_layout"
-                    android:fontFamily="@font/a_cinema_light"
+                    android:fontFamily="@font/barunhippie"
                     android:gravity="top"
                     android:hint="일기를 적어보세요 :)"
                     android:lineSpacingExtra="8dp"
+                    android:minHeight="200dp"
                     android:padding="15dp"
                     android:textColor="@color/textPrimary"
                     android:textSize="18sp" />

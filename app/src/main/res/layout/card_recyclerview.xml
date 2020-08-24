@@ -22,7 +22,7 @@
             android:id="@+id/diaryYear"
             android:layout_width="match_parent"
             android:layout_height="18dp"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text="2020"
             android:textColor="@color/textPrimary"
             app:scale_top="50"
@@ -39,7 +39,7 @@
             app:scale_width="60"
             app:scale_height="100"
             app:scale_textsize="50"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text="년 "
             android:textColor="@color/textPrimary" />
 
@@ -47,7 +47,7 @@
             android:id="@+id/diaryMonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text="5"
             android:textColor="@color/textPrimary"
             app:scale_top="50"
@@ -59,7 +59,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             app:scale_top="50"
             app:scale_left="460"
             app:scale_width="60"
@@ -77,7 +77,7 @@
             app:scale_width="50"
             app:scale_height="100"
             app:scale_textsize="50"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text="24"
             android:textColor="@color/textPrimary" />
 
@@ -89,7 +89,7 @@
             app:scale_width="60"
             app:scale_height="100"
             app:scale_textsize="50"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text="일 "
             android:textColor="@color/textPrimary" />
 
@@ -101,7 +101,7 @@
             app:scale_width="20"
             app:scale_height="100"
             app:scale_textsize="50"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text="("
             android:textColor="@color/textPrimary" />
         <TextView
@@ -113,7 +113,7 @@
             app:scale_width="50"
             app:scale_height="100"
             app:scale_textsize="50"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text="일"
             android:textColor="@color/textPrimary" />
         <TextView
@@ -124,7 +124,7 @@
             app:scale_width="20"
             app:scale_height="100"
             app:scale_textsize="50"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text=")"
             android:textColor="@color/textPrimary" />
 
@@ -137,7 +137,7 @@
             app:scale_width="160"
             app:scale_height="100"
             app:scale_textsize="50"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:text="행복해"
             android:textColor="@color/textPrimary" />
 
@@ -161,7 +161,7 @@
             app:scale_width="900"
             app:scale_height="400"
             app:scale_textsize="60"
-            android:fontFamily="@font/a_cinema_light"
+            android:fontFamily="@font/barunhippie"
             android:textAlignment="center"
             android:lineSpacingExtra="8dp"
             android:text="오늘은 너무 행복한 하루였다.\n예빈이랑 치킨도 시켜먹고\n
