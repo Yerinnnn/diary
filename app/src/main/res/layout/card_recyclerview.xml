@@ -5,186 +5,223 @@
     android:layout_height="wrap_content"
     android:layout_margin="20dp"
     android:layout_marginLeft="10dp"
-    android:padding="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
-    android:background="@drawable/border_layout"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
-    <com.ssomai.android.scalablelayout.ScalableLayout
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:scale_base_height="1100"
-        app:scale_base_width="1080" >
+        android:layout_height="wrap_content">
 
-
-        <TextView
-            android:id="@+id/diaryYear"
-            android:layout_width="match_parent"
-            android:layout_height="18dp"
-            android:fontFamily="@font/barunhippie"
-            android:text="2020"
-            android:textColor="@color/textPrimary"
-            app:scale_top="50"
-            app:scale_left="230"
-            app:scale_width="110"
-            app:scale_height="100"
-            app:scale_textsize="50" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scale_top="50"
-            app:scale_left="330"
-            app:scale_width="60"
-            app:scale_height="100"
-            app:scale_textsize="50"
-            android:fontFamily="@font/barunhippie"
-            android:text="년 "
-            android:textColor="@color/textPrimary" />
-
-        <TextView
-            android:id="@+id/diaryMonth"
+        <com.ssomai.android.scalablelayout.ScalableLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/barunhippie"
-            android:text="5"
-            android:textColor="@color/textPrimary"
-            app:scale_top="50"
-            app:scale_left="400"
-            app:scale_width="60"
-            app:scale_height="100"
-            app:scale_textsize="50" />
+            android:background="@drawable/border_layout"
+            app:scale_base_height="1100"
+            app:scale_base_width="1080">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/barunhippie"
-            app:scale_top="50"
-            app:scale_left="460"
-            app:scale_width="60"
-            app:scale_height="100"
-            app:scale_textsize="50"
-            android:text="월 "
-            android:textColor="@color/textPrimary" />
 
-        <TextView
-            android:id="@+id/diaryDay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scale_top="50"
-            app:scale_left="520"
-            app:scale_width="50"
-            app:scale_height="100"
-            app:scale_textsize="50"
-            android:fontFamily="@font/barunhippie"
-            android:text="24"
-            android:textColor="@color/textPrimary" />
+            <TextView
+                android:id="@+id/diaryYear"
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:fontFamily="@font/barunhippie"
+                android:text="2020"
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="230"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="110" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scale_top="50"
-            app:scale_left="570"
-            app:scale_width="60"
-            app:scale_height="100"
-            app:scale_textsize="50"
-            android:fontFamily="@font/barunhippie"
-            android:text="일 "
-            android:textColor="@color/textPrimary" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="년 "
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="330"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="60" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scale_top="50"
-            app:scale_left="630"
-            app:scale_width="20"
-            app:scale_height="100"
-            app:scale_textsize="50"
-            android:fontFamily="@font/barunhippie"
-            android:text="("
-            android:textColor="@color/textPrimary" />
-        <TextView
-            android:id="@+id/diaryDate"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scale_top="50"
-            app:scale_left="650"
-            app:scale_width="50"
-            app:scale_height="100"
-            app:scale_textsize="50"
-            android:fontFamily="@font/barunhippie"
-            android:text="일"
-            android:textColor="@color/textPrimary" />
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scale_top="50"
-            app:scale_left="700"
-            app:scale_width="20"
-            app:scale_height="100"
-            app:scale_textsize="50"
-            android:fontFamily="@font/barunhippie"
-            android:text=")"
-            android:textColor="@color/textPrimary" />
+            <TextView
+                android:id="@+id/diaryMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="5"
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="400"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="60" />
 
-        <TextView
-            android:id="@+id/diaryEmotion"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scale_top="50"
-            app:scale_left="740"
-            app:scale_width="160"
-            app:scale_height="100"
-            app:scale_textsize="50"
-            android:fontFamily="@font/barunhippie"
-            android:text="행복해"
-            android:textColor="@color/textPrimary" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="월 "
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="460"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="60" />
 
-        <ImageView
-            android:id="@+id/diaryEmoji"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:src="@drawable/ubu"
-            app:scale_top="180"
-            app:scale_left="270"
-            app:scale_width="500"
-            app:scale_height="500" />
+            <TextView
+                android:id="@+id/diaryDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="24"
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="520"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="50" />
 
-        <TextView
-            android:id="@+id/diaryContent"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:scale_top="730"
-            app:scale_left="70"
-            app:scale_width="900"
-            app:scale_height="400"
-            app:scale_textsize="60"
-            android:fontFamily="@font/barunhippie"
-            android:textAlignment="center"
-            android:lineSpacingExtra="8dp"
-            android:text="오늘은 너무 행복한 하루였다.\n예빈이랑 치킨도 시켜먹고\n
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="일 "
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="570"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="60" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="("
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="630"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="20" />
+
+            <TextView
+                android:id="@+id/diaryDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="일"
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="650"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="50" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text=")"
+                android:textColor="@color/textPrimary"
+                app:scale_height="100"
+                app:scale_left="700"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="20" />
+
+            <TextView
+                android:id="@+id/diaryEmotion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="행복해"
+                android:textColor="@color/textPrimary"
+                android:textFontWeight="900"
+                app:scale_height="100"
+                app:scale_left="740"
+                app:scale_textsize="50"
+                app:scale_top="50"
+                app:scale_width="160" />
+
+            <ImageView
+                android:id="@+id/diaryEmoji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:src="@drawable/ubu"
+                app:scale_height="500"
+                app:scale_left="270"
+                app:scale_top="180"
+                app:scale_width="500" />
+
+            <TextView
+                android:id="@+id/diaryContent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:lineSpacingExtra="8dp"
+                android:text="오늘은 너무 행복한 하루였다.\n예빈이랑 치킨도 시켜먹고\n
 같이 영화도 봤다.\n매일 매일이 이랬으면 좋겠다 :)"
-            android:textColor="@color/textPrimary"
-            android:textSize="18sp" />
+                android:textAlignment="center"
+                android:textColor="@color/textPrimary"
+                android:textSize="18sp"
+                app:scale_height="400"
+                app:scale_left="70"
+                app:scale_textsize="60"
+                app:scale_top="730"
+                app:scale_width="900" />
 
-        <ImageView
-            android:id="@+id/diaryPhoto"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:visibility="gone"></ImageView>
+            <ImageView
+                android:id="@+id/diaryPhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:visibility="gone"></ImageView>
 
-        <TextView
-            android:id="@+id/diaryPhotoWarning"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center"
-            android:text="사진을 찾을 수 없습니다 :("
-            android:visibility="gone">
+            <TextView
+                android:id="@+id/diaryPhotoWarning"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:gravity="center"
+                android:text="사진을 찾을 수 없습니다 :("
+                android:visibility="gone">
 
-        </TextView>
-    </com.ssomai.android.scalablelayout.ScalableLayout>
+            </TextView>
+        </com.ssomai.android.scalablelayout.ScalableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnEdit"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_edit_black_24dp"></Button>
+
+        <Button
+            android:id="@+id/btnDelete"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_delete_black_24dp"></Button>
+
+        <Button
+            android:id="@+id/btnShare"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginRight="10dp"
+            android:layout_gravity="right"
+            android:background="@drawable/ic_share_black_24dp"></Button>
+    </LinearLayout>
 </LinearLayout>
