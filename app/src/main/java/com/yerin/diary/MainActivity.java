@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.database.CursorWindow;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,7 +22,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity {
     private TextView firstMessage;
     private TextView diaryYear, diaryMonth, diaryDay;
     private LinearLayout diarySetDate;
@@ -137,7 +136,9 @@ public class MainActivity extends AppCompatActivity{
                 int currentMonth = calendar.get(Calendar.MONTH);
                 int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-                createDialogWithoutDateField().show();
+                DatePickerDialog datePickerDialog = new DatePickerDialog();
+                datePickerDialog.setListener(datePickerListener);
+                datePickerDialog.show(getSupportFragmentManager(), "date picker test");
 
 //                DatePickerDialog.OnDateSetListener dDateSetListener =
 //                        new DatePickerDialog.OnDateSetListener() {
@@ -162,31 +163,6 @@ public class MainActivity extends AppCompatActivity{
 //                        };
 //                DatePickerDialog dialog = new DatePickerDialog(MainActivity.this, dDateSetListener, currentYear, currentMonth, currentDay);
 //                dialog.show();
-
-//                datePickerDialog = (DatePicker) findViewById(R.id.datePicker);
-//                try {
-//                    DatePickerDialog datePickerDialog = new DatePickerDialog(MainActivity.this, onDateSetListener, currentYear, currentMonth, currentDay);
-//
-//                    Field f[] = datePickerDialog.getClass().getDeclaredFields();
-//                    for (Field field : f) {
-//                        if (field.getName().equals("mDaySpinner") || field.getName().equals("mDayPicker")) {
-//                            field.setAccessible(true);
-//                            Object dayPicker = new Object();
-//                            dayPicker = field.get(datePickerDialog);
-//                            ((View) dayPicker).setVisibility(View.GONE);
-//                        }
-//                    }
-//                } catch (SecurityException e) {
-//                    Log.d("ERROR", e.getMessage());
-//                } catch (IllegalArgumentException e) {
-//                    Log.d("ERROR", e.getMessage());
-//                } catch (IllegalAccessException e) {
-//                    Log.d("ERROR", e.getMessage());
-//                }
-
-//                datePickerDialog = new DatePickerDialog();
-//                datePickerDialog.setListener(this);
-//                datePickerDialog.show(getFragmentManager(), "datePickerDialog");
 
             }
         });
@@ -230,49 +206,20 @@ public class MainActivity extends AppCompatActivity{
         });
     }
 
-//    private DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
-//        @Override
-//        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//
-//        }
-//    };
+    android.app.DatePickerDialog.OnDateSetListener datePickerListener = new android.app.DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            Log.d("YearMonthPickerTest", "year = " + year + ", month = " + monthOfYear + ", day = " + dayOfMonth);
 
-//    @Override
-//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//        diaryYear.setText((year) + "");
-//        if ((month + 1) < 10)
-//            diaryMonth.setText("0" + (month + 1) + "");
-//        else diaryMonth.setText((dayOfMonth + 1) + "");
-//    }
+            diaryYear.setText((year) + "");
+            if ((monthOfYear + 1) < 10)
+                diaryMonth.setText("0" + (monthOfYear + 1) + "");
+            else diaryMonth.setText((dayOfMonth + 1) + "");
 
-    private DatePickerDialog createDialogWithoutDateField() {
-        calendar = Calendar.getInstance();
+            dList = DBHelper.dGetDiaryList(diaryYear.getText().toString(), diaryMonth.getText().toString());
 
-        int currentYear = calendar.get(Calendar.YEAR);
-        int currentMonth = calendar.get(Calendar.MONTH);
-        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-
-        DatePickerDialog dpd = new DatePickerDialog(this, null, currentYear, currentMonth, currentDay);
-        try {
-            java.lang.reflect.Field[] datePickerDialogFields = dpd.getClass().getDeclaredFields();
-            for (java.lang.reflect.Field datePickerDialogField : datePickerDialogFields) {
-                if (datePickerDialogField.getName().equals("mDatePicker") || datePickerDialogField.getName().equals("mDateSpinner")) {
-                    datePickerDialogField.setAccessible(true);
-                    DatePicker datePicker = (DatePicker) datePickerDialogField.get(dpd);
-                    java.lang.reflect.Field[] datePickerFields = datePickerDialogField.getType().getDeclaredFields();
-                    for (java.lang.reflect.Field datePickerField : datePickerFields) {
-                        Log.i("test", datePickerField.getName());
-                        if ("mDaySpinner".equals(datePickerField.getName())) {
-                            datePickerField.setAccessible(true);
-                            Object dayPicker = datePickerField.get(datePicker);
-                            ((View) dayPicker).setVisibility(View.GONE);
-                        }
-                    }
-                }
-            }
+            dAdapter = new DiaryAdapter(dList);
+            recyclerView.setAdapter(dAdapter);
         }
-        catch (Exception ex) {
-        }
-        return dpd;
-    }
+    };
 }
