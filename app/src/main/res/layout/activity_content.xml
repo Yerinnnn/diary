@@ -59,13 +59,15 @@
     <!--        android:layout_height="match_parent">-->
 
     <LinearLayout
+        android:id="@+id/contentActivityLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:layout_marginBottom="25dp"
         android:background="@color/backgroundYellow"
-        android:gravity="center"
+        android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingLeft="35dp"
         android:paddingRight="35dp"
@@ -75,6 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_gravity="center"
             android:layout_marginBottom="30dp"
             android:orientation="horizontal">
 
@@ -84,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
                 android:text="2020"
+                android:textSize="18sp"
                 android:textColor="@color/textPrimary" />
 
             <TextView
@@ -91,6 +95,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
                 android:text="년 "
+                android:textSize="18sp"
                 android:textColor="@color/textPrimary" />
 
             <TextView
@@ -99,6 +104,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
                 android:text="5"
+                android:textSize="18sp"
                 android:textColor="@color/textPrimary" />
 
             <TextView
@@ -106,6 +112,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
                 android:text="월 "
+                android:textSize="18sp"
                 android:textColor="@color/textPrimary" />
 
             <TextView
@@ -114,13 +121,23 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
                 android:text="24"
+                android:textSize="18sp"
                 android:textColor="@color/textPrimary" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
+                android:textSize="18sp"
                 android:text="일 "
+                android:textColor="@color/textPrimary" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/barunhippie"
+                android:text="("
+                android:textSize="18sp"
                 android:textColor="@color/textPrimary" />
 
             <TextView
@@ -128,6 +145,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
+                android:textSize="18sp"
                 android:text="일"
                 android:textColor="@color/textPrimary" />
 
@@ -135,7 +153,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
-                android:text="요일 "
+                android:text=") "
+                android:textSize="18sp"
                 android:textColor="@color/textPrimary" />
 
             <TextView
@@ -144,6 +163,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
                 android:text="행복해"
+                android:textSize="18sp"
                 android:textColor="@color/textPrimary" />
         </LinearLayout>
 
@@ -166,7 +186,7 @@
             android:text="오늘은 너무 행복한 하루였다.\n예빈이랑 치킨도 시켜먹고\n
 같이 영화도 봤다.\n매일 매일이 이랬으면 좋겠다 :)"
             android:textColor="@color/textPrimary"
-            android:textSize="18sp" />
+            android:textSize="20sp" />
 
 
         <ImageView

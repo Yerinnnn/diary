@@ -1,5 +1,6 @@
 package com.yerin.diary;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
@@ -16,6 +17,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -35,16 +38,25 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
+import androidx.core.content.FileProvider;
 
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+import com.soundcloud.android.crop.Crop;
+
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
+import static java.lang.System.in;
 
 public class AddActivity extends Activity {
     private LinearLayout diarySetDate;
@@ -66,8 +78,15 @@ public class AddActivity extends Activity {
 
     private static final int REQUEST_CODE = 0;
     private Uri uri;
+    private Uri savingUri;
 
-//    private Diary diary;
+    private Boolean isCamera = false;
+    private Boolean isPermission = true;
+
+    private static final int PICK_FROM_ALBUM = 1;
+    private static final int PICK_FROM_CAMERA = 2;
+
+    private File tempFile;
 
     private String dYear, dMonth, dDay, dDate, dEmotion, dContent, dPhoto;
     private int dEmoji;
@@ -356,10 +375,15 @@ public class AddActivity extends Activity {
         diaryPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, REQUEST_CODE);
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(intent, REQUEST_CODE);
+                tedPermission();
+
+                if (isPermission) goToAlbum();
+                else
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.permission_2), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -427,7 +451,7 @@ public class AddActivity extends Activity {
                 }
 
                 try {
-                    dPhoto = uri.toString();
+                    dPhoto = savingUri.toString();
                 } catch (Exception e) {
                     dPhoto = null;
                 }
@@ -461,13 +485,7 @@ public class AddActivity extends Activity {
                     builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-//                            Intent intentHome = new Intent(AddActivity.this, MainActivity.class);
-//                            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            startActivity(intentHome);
-
                             dialog.dismiss();
-
-                            finish();
                         }
                     });
 
@@ -485,41 +503,41 @@ public class AddActivity extends Activity {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                try {
-                    uri = data.getData();
-
-                    InputStream in = getContentResolver().openInputStream(data.getData());
-
-                    Bitmap img = BitmapFactory.decodeStream(in);
-
-                    ExifInterface exif = new ExifInterface(getContentResolver().openInputStream(uri));
-
-                    in.close();
-
-                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                    Matrix matrix = new Matrix();
-                    if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                        matrix.postRotate(90);
-                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                        matrix.postRotate(180);
-                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                        matrix.postRotate(270);
-                    }
-
-                    diaryPhoto.setImageBitmap(img);
-                } catch (Exception e) {
-
-                }
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+//    @RequiresApi(api = Build.VERSION_CODES.N)
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        if (requestCode == REQUEST_CODE) {
+//            if (resultCode == RESULT_OK) {
+//                try {
+//                    uri = data.getData();
+//
+//                    InputStream in = getContentResolver().openInputStream(data.getData());
+//
+//                    Bitmap img = BitmapFactory.decodeStream(in);
+//
+//                    ExifInterface exif = new ExifInterface(getContentResolver().openInputStream(uri));
+//
+//                    in.close();
+//
+//                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//                    Matrix matrix = new Matrix();
+//                    if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
+//                        matrix.postRotate(90);
+//                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
+//                        matrix.postRotate(180);
+//                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
+//                        matrix.postRotate(270);
+//                    }
+//
+//                    diaryPhoto.setImageBitmap(img);
+//                } catch (Exception e) {
+//
+//                }
+//            } else if (resultCode == RESULT_CANCELED) {
+//                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+//            }
+//        }
+//    }
 
     public static class ObjectUtils {
         public static boolean isEmpty(Object s) {
@@ -542,4 +560,150 @@ public class AddActivity extends Activity {
         }
     }
 
+    // 앨범에서 이미지 가져오기
+    private void goToAlbum() {
+        isCamera = false;
+
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, PICK_FROM_ALBUM);
+    }
+
+
+//    // 카메라에서 이미지 가져오기
+//    private void takePhoto() {
+//        isCamera = true;
+//
+//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//        try {
+//            tempFile = createImageFile();
+//        } catch (IOException e) {
+//            Toast.makeText(this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+//            finish();
+//            e.printStackTrace();
+//        }
+//        if (tempFile != null) {
+//
+//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+//
+//                Uri photoUri = FileProvider.getUriForFile(this,
+//                        "book.provider", tempFile);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+//                startActivityForResult(intent, PICK_FROM_CAMERA);
+//
+//            } else {
+//
+//                Uri photoUri = Uri.fromFile(tempFile);
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+//                startActivityForResult(intent, PICK_FROM_CAMERA);
+//            }
+//        }
+//    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
+
+            if (tempFile != null) {
+                if (tempFile.exists()) {
+
+                    if (tempFile.delete()) {
+                        Log.e(TAG, tempFile.getAbsolutePath() + " 삭제 성공");
+                        tempFile = null;
+                    }
+                }
+            }
+            return;
+        }
+
+        switch (requestCode) {
+            case PICK_FROM_ALBUM: {
+                Uri photoUri = data.getData();
+                Log.d(TAG, "PICK_FROM_ALBUM photoUri : " + photoUri);
+
+                cropImage(photoUri);
+
+                break;
+            }
+            case Crop.REQUEST_CROP: {
+                // File cropFile = new File(Crop.getOutput(data).getPath());
+                setImage();
+            }
+        }
+    }
+
+    // 이미지 crop
+    private void cropImage(Uri photoUri) {
+        // 갤러리에서 선택한 경우에는 tempFile 이 없으므로 새로 생성해야함
+        try {
+            tempFile = createImageFile();
+        } catch (IOException e) {
+            Toast.makeText(this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            finish();
+            e.printStackTrace();
+        }
+
+        //크롭 후 저장할 Uri
+        savingUri = Uri.fromFile(tempFile);
+
+        Crop.of(photoUri, savingUri).start(this);
+    }
+
+    // 폴더 및 파일 만들기
+    private File createImageFile() throws IOException {
+
+        // 이미지 파일 이름 ( diary_{시간}_ )
+        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+        String imageFileName = "diary_" + timeStamp + "_";
+        Log.d(TAG, "createImageFile: imageFileName: " + imageFileName);
+
+        // 이미지가 저장될 폴더 이름 ( Diary )
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                + File.separator + "/Diary/");
+        if (!storageDir.exists()) storageDir.mkdirs();
+        Log.d(TAG, "createImageFile: storageDir: " + storageDir);
+
+        // 파일 생성
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        Log.d(TAG, "createImageFile : " + image.getAbsolutePath());
+
+        return image;
+    }
+
+    // tempfile을 bitmap으로 변환 후 imageview에 setImage
+    private void setImage() {
+        diaryPhoto.setImageURI(savingUri);
+
+        // tempFile 사용 후 null 처리가 필요
+        // (resultCode != RESULT_OK) 일 때 tempFile 을 삭제하기 때문에
+        // 기존에 데이터가 남아있게 되면 원치 않은 삭제가 이루어질 수 있음
+        tempFile = null;
+
+    }
+    // 권한 설정
+    private void tedPermission() {
+
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                // 권한 요청 성공
+                isPermission = true;
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                // 권한 요청 실패
+                isPermission = false;
+            }
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage(getResources().getString(R.string.permission_2))
+                .setDeniedMessage(getResources().getString(R.string.permission_1))
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .check();
+    }
 }

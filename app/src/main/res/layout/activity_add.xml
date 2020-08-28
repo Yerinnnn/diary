@@ -244,8 +244,7 @@
                 <ImageView
                     android:id="@+id/diaryPhoto"
                     android:layout_width="wrap_content"
-                    android:layout_height="250dp"
-                    android:maxHeight="400dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:src="@drawable/add_ubu">
 

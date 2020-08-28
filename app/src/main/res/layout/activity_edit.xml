@@ -223,7 +223,7 @@
                     android:minHeight="200dp"
                     android:padding="15dp"
                     android:textColor="@color/textPrimary"
-                    android:textSize="18sp" />
+                    android:textSize="20sp" />
 
                 <ImageView
                     android:id="@+id/diaryPhoto"

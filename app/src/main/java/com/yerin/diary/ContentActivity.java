@@ -1,22 +1,32 @@
 package com.yerin.diary;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static android.content.ContentValues.TAG;
 import static android.view.View.GONE;
+import static java.lang.System.out;
 
 public class ContentActivity extends Activity {
     private String dYear, dMonth, dDay, dDate;
@@ -28,6 +38,7 @@ public class ContentActivity extends Activity {
     private TextView diaryYear, diaryMonth, diaryDay, diaryDate, diaryEmotion, diaryContent;
     private ImageView diaryEmoji, diaryPhoto;
     private Button btnBack, btnEdit, btnDelete, btnShare;
+    private LinearLayout diaryContentActivityLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +59,7 @@ public class ContentActivity extends Activity {
         diaryEmoji = findViewById(R.id.diaryEmoji);
         diaryContent = findViewById(R.id.diaryContent);
         diaryPhoto = findViewById(R.id.diaryPhoto);
+        diaryContentActivityLayout = findViewById(R.id.contentActivityLayout);
 
 
         // DiaryAdapter에서 intent로 보낸 데이터 받기
@@ -188,10 +200,13 @@ public class ContentActivity extends Activity {
         }
 
         diaryContent.setText(diary.getdContent());
+
         try {
             diaryPhoto.setImageURI(Uri.parse(diary.getdPhoto()));
+            Log.d(TAG, "onCreate: getdPhoto: " + diary.getdPhoto());
         } catch (Exception e) {
             diaryPhoto.setVisibility(GONE);
+            e.getMessage();
 //            holder.dPhotoWarning.setVisibility(View.VISIBLE);
         }
 
@@ -221,17 +236,80 @@ public class ContentActivity extends Activity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBHelper.dDelete(dYear, dMonth, dDay);
-                DBHelper.close();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ContentActivity.this);
+                builder.setTitle("삭제");
+                builder.setMessage("정말 삭제?");
+                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DBHelper.dDelete(dYear, dMonth, dDay);
+                        DBHelper.close();
+
+                        Intent intentHome = new Intent(ContentActivity.this, MainActivity.class);
+                        intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intentHome);
+                        finish();
+                    }
+                });
+                builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
             }
         });
 
         btnShare.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                diaryContentActivityLayout.setDrawingCacheEnabled(true);
 
+                Bitmap bm = diaryContentActivityLayout.getDrawingCache();
+
+                try {
+                    capture(bm);
+                } catch (Exception e) {
+
+                } finally {
+                    bm.recycle();
+                }
+                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+
+                intent.setType("image/*");
+
+                intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(diary.getdPhoto()));
+
+                Intent chooser = Intent.createChooser(intent, "친구에게 공유하기");
+                startActivity(chooser);
             }
         });
+    }
 
+    private void capture(Bitmap bm) throws Exception {
+        try {
+            String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+            String imageFileName = "diary_" + timeStamp + "_";
+            Log.d(TAG, "createImageFile: imageFileName: " + imageFileName);
+
+            // 이미지가 저장될 폴더 이름 ( Diary )
+            File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    + File.separator);
+            if (!storageDir.exists()) storageDir.mkdirs();
+            Log.d(TAG, "createImageFile: storageDir: " + storageDir);
+
+            // 파일 생성
+            File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+            Log.d(TAG, "createImageFile : " + image.getAbsolutePath());
+
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
+        } catch (Exception e) {
+
+        } finally {
+            if(out != null) {
+                out.close();
+            }
+        }
     }
 }

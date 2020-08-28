@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -83,7 +84,6 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
 
                     // 아이템 클릭 시 ContentActivity로 이동
                     if (position != RecyclerView.NO_POSITION) {
-                        try {
                             Intent intent = new Intent(dContext, ContentActivity.class);
 
                             String dYear = dList.get(position).getdYear();
@@ -97,40 +97,37 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
                             intent.putExtra("dDate", dDate);
 
                             dContext.startActivity(intent);
-                        } catch (Exception e) {
-
-                        }
                     }
                 }
 
             });
 
             // 아이템 롱 클릭시 메뉴 다이얼로그
-//            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-//                @Override
-//                public boolean onLongClick(View v) {
-//                    final String[] items = {"편집하기", "삭제하기", "공유하기"};
-//                    final int position = getAdapterPosition();
-//                    if (position != RecyclerView.NO_POSITION) {
-////                        MenuDialog menuDialog = new MenuDialog(dList.get(position).getdYear(), dList.get(position).getdMonth(), dList.get(position).getdDate(), dList.get(position).getdContent());
-////                        menuDialog.show();
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(dContext);
-//                        builder.setItems(items, new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // The 'which' argument contains the index position
-//                                // of the selected item
-//
-//
-//                            }
-//                        });
-//                        AlertDialog alertDialog = builder.create();
-////                        alertDialog.setBackgroundDrawable(new ColorDrawable(Color.argb(255,62,79,92)));
-//                    }
-//
-//
-//                    return false;
-//                }
-//            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    final String[] items = {"편집하기", "삭제하기", "공유하기"};
+                    final int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+//                        MenuDialog menuDialog = new MenuDialog(dList.get(position).getdYear(), dList.get(position).getdMonth(), dList.get(position).getdDate(), dList.get(position).getdContent());
+//                        menuDialog.show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(dContext);
+                        builder.setItems(items, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // The 'which' argument contains the index position
+                                // of the selected item
+
+
+                            }
+                        });
+                        AlertDialog alertDialog = builder.create();
+//                        alertDialog.setBackgroundDrawable(new ColorDrawable(Color.argb(255,62,79,92)));
+                    }
+
+
+                    return false;
+                }
+            });
         }
     }
 
