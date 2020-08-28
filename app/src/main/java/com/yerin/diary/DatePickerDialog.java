@@ -32,7 +32,7 @@ public class DatePickerDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View dialog = inflater.inflate(R.layout.datepicker_dialog, null);
+        View dialog = inflater.inflate(R.layout.year_month_datepicker_dialog, null);
 
         btnConfirm = dialog.findViewById(R.id.btnConfirm);
         btnCancel = dialog.findViewById(R.id.btnCancel);
@@ -52,6 +52,7 @@ public class DatePickerDialog extends DialogFragment {
             public void onClick(View view) {
                 listener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue(), 0);
                 DatePickerDialog.this.getDialog().cancel();
+
             }
         });
 

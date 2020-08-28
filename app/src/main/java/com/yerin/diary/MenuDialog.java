@@ -38,31 +38,6 @@ public class MenuDialog extends DialogFragment {
         View dialog = inflater.inflate(R.layout.diary_menu_dialog, null);
         DBHelper = new DbHelper(getContext(), "diary", null, 1);
 
-        btnEdit = dialog.findViewById(R.id.btnAdd);
-        btnDelete = dialog.findViewById(R.id.btnDelete);
-        btnShare = dialog.findViewById(R.id.btnShare);
-
-        btnEdit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        btnDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                DBHelper.dDelete();
-            }
-        });
-
-        btnShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         builder.setView(dialog);
 

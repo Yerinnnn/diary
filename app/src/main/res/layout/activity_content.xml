@@ -2,20 +2,79 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="25dp"
-    android:background="@drawable/border_layout"
-    android:orientation="vertical"
-    android:padding="35dp">
+    android:background="@drawable/grid"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="25dp"
+        android:gravity="left"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBack"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:background="@drawable/ic_close_black_24dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnEdit"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_edit_black_24dp"></Button>
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_delete_black_24dp"></Button>
+
+            <Button
+                android:id="@+id/btnShare"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_gravity="right"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/ic_share_black_24dp"></Button>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="640dp">-->
+
+    <!--    <ScrollView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginBottom="25dp"
+        android:background="@color/backgroundYellow"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingLeft="35dp"
+        android:paddingRight="35dp"
+        android:paddingBottom="35dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:layout_marginBottom="30dp"
             android:orientation="horizontal">
 
@@ -90,12 +149,11 @@
 
         <ImageView
             android:id="@+id/diaryEmoji"
-            android:layout_gravity="center"
-            android:src="@drawable/ubu"
             android:layout_width="200dp"
             android:layout_height="150dp"
-            android:layout_margin="5dp" />
-
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:src="@drawable/ubu" />
 
         <TextView
             android:id="@+id/diaryContent"
@@ -113,13 +171,46 @@
 
         <ImageView
             android:id="@+id/diaryPhoto"
-            android:background="@drawable/border_layout"
-            android:layout_gravity="center"
-            android:src="@drawable/ubu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp" />
-
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/border_layout"
+            android:src="@drawable/ubu" />
     </LinearLayout>
+
+    <!--    </ScrollView>-->
+
+    <!--    </LinearLayout>-->
+
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginLeft="25dp"-->
+    <!--        android:layout_marginRight="25dp"-->
+    <!--        android:orientation="horizontal">-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btnEdit"-->
+    <!--            android:layout_width="28dp"-->
+    <!--            android:layout_height="28dp"-->
+    <!--            android:layout_marginRight="10dp"-->
+    <!--            android:background="@drawable/ic_edit_black_24dp"></Button>-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btnDelete"-->
+    <!--            android:layout_width="28dp"-->
+    <!--            android:layout_height="28dp"-->
+    <!--            android:layout_marginRight="10dp"-->
+    <!--            android:background="@drawable/ic_delete_black_24dp"></Button>-->
+
+    <!--        <Button-->
+    <!--            android:id="@+id/btnShare"-->
+    <!--            android:layout_width="28dp"-->
+    <!--            android:layout_height="28dp"-->
+    <!--            android:layout_gravity="right"-->
+    <!--            android:layout_marginRight="10dp"-->
+    <!--            android:background="@drawable/ic_share_black_24dp"></Button>-->
+    <!--    </LinearLayout>-->
 
 </LinearLayout>

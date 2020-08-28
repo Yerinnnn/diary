@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/grid"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -26,54 +26,54 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
-                android:text="2020"
                 android:gravity="center"
+                android:text="2020"
+                android:textColor="@color/textPrimary"
                 app:scale_height="110"
                 app:scale_left="490"
-                app:scale_top="100"
-                app:scale_width="180"
                 app:scale_textsize="80"
-                android:textColor="@color/textPrimary" />
+                app:scale_top="100"
+                app:scale_width="180" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
-                android:text="년 "
                 android:gravity="center"
+                android:text="년 "
+                android:textColor="@color/textPrimary"
                 app:scale_height="110"
                 app:scale_left="670"
-                app:scale_top="100"
-                app:scale_width="80"
                 app:scale_textsize="80"
-                android:textColor="@color/textPrimary" />
+                app:scale_top="100"
+                app:scale_width="80" />
 
             <TextView
                 android:id="@+id/diaryMonth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
-                android:text="5"
                 android:gravity="center"
+                android:text="5"
+                android:textColor="@color/textPrimary"
                 app:scale_height="110"
                 app:scale_left="750"
-                app:scale_top="100"
-                app:scale_width="90"
                 app:scale_textsize="80"
-                android:textColor="@color/textPrimary" />
+                app:scale_top="100"
+                app:scale_width="90" />
 
             <TextView
                 android:layout_width="75dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/barunhippie"
-                android:text="월 "
                 android:gravity="center"
+                android:text="월 "
+                android:textColor="@color/textPrimary"
                 app:scale_height="110"
                 app:scale_left="840"
-                app:scale_top="100"
-                app:scale_width="80"
                 app:scale_textsize="80"
-                android:textColor="@color/textPrimary" />
+                app:scale_top="100"
+                app:scale_width="80" />
         </com.ssomai.android.scalablelayout.ScalableLayout>
     </LinearLayout>
 
@@ -92,6 +92,8 @@
 
             <Button
                 android:id="@+id/btnSetting"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/ic_settings_black_24dp"
                 app:scale_height="110"
@@ -153,9 +155,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
+        android:layout_margin="40dp"
         android:backgroundTint="#718D5F"
-        android:src="@drawable/btn_add"
-        android:layout_margin="40dp" >
+        android:src="@drawable/btn_add">
 
     </com.google.android.material.floatingactionbutton.FloatingActionButton>
 

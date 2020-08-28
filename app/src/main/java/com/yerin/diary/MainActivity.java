@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         db = DBHelper.getWritableDatabase();
 
         dAdapter = new DiaryAdapter(dList);
+        dAdapter.setdContext(getApplicationContext());
         recyclerView.setAdapter(dAdapter);
 
         new Handler().postDelayed(new Runnable() {

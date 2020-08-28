@@ -2,28 +2,23 @@ package com.yerin.diary;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.view.View;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -37,16 +32,15 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
+import static android.view.View.GONE;
+import static java.lang.System.in;
+import static java.util.Collections.rotate;
 
-public class AddActivity extends Activity {
+public class EditActivity extends Activity {
     private LinearLayout diarySetDate;
     private TextView diaryYear, diaryMonth, diaryDay, diaryDate;
     private RadioGroup emotionRadioGroup1, emotionRadioGroup2;
@@ -55,11 +49,11 @@ public class AddActivity extends Activity {
     private EditText diaryContent;
     private Button btnBack, btnSave;
 
-    private int currentYear;
-    private int currentMonth;
-    private int currentDay;
+    private String dYear, dMonth, dDay, dDate, dEmotion, dContent, dPhoto;
+    private int dEmoji;
 
-    private Calendar calendar;
+    private DbHelper DBHelper;
+    private Diary diary;
 
     private boolean isEmotionChecking = true;
     private int emotionCheckedId;
@@ -67,18 +61,10 @@ public class AddActivity extends Activity {
     private static final int REQUEST_CODE = 0;
     private Uri uri;
 
-//    private Diary diary;
-
-    private String dYear, dMonth, dDay, dDate, dEmotion, dContent, dPhoto;
-    private int dEmoji;
-
-    private DbHelper DBHelper;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add);
-
+        setContentView(R.layout.activity_edit);
         DBHelper = new DbHelper(getApplicationContext(), "diary", null, 1);
 
         // xml 요소 연결
@@ -104,103 +90,194 @@ public class AddActivity extends Activity {
         btnBack = findViewById(R.id.btnBack);
         btnSave = findViewById(R.id.btnSave);
 
-        // 현재 날짜 구하기
-        calendar = Calendar.getInstance();
+        Intent intent = getIntent();
+        dYear = intent.getStringExtra("dYear");
+        dMonth = intent.getStringExtra("dMonth");
+        dDay = intent.getStringExtra("dDay");
+        dDate = intent.getStringExtra("dDate");
 
-        currentYear = calendar.get(Calendar.YEAR);
-        currentMonth = calendar.get(Calendar.MONTH);
-        currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        diaryYear.setText(dYear);
+        diaryMonth.setText(dMonth);
+        diaryDay.setText(dDay);
+        diaryDate.setText(dDate);
 
-        diaryYear.setText((currentYear) + "");
-        if ((currentMonth + 1) < 10) diaryMonth.setText("0" + (currentMonth + 1) + "");
-        else diaryMonth.setText((currentMonth + 1) + "");
-        if (currentDay < 10) diaryDay.setText("0" + (currentDay) + "");
-        else diaryDay.setText((currentDay) + "");
+        Log.d(TAG, "onCreate: EditActivity getStringExtra dYear dMonth: " + dYear + dMonth + dDay + dDate);
+        Log.d(TAG, "onCreate: EditActivity dGetDiary: " + DBHelper.dGetDiary(dYear, dMonth, dDay));
 
-        // 위의 날짜에 해당하는 요일
-        String day = diaryYear.getText().toString() + diaryMonth.getText().toString() + diaryDay.getText().toString();
-        String[] week = {"일", "월", "화", "수", "목", "금", "토"};
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        diary = DBHelper.dGetDiary(dYear, dMonth, dDay);
 
-        Calendar cal = Calendar.getInstance();
-        Date getDate;
-        try {
-            getDate = dateFormat.parse(day);
-            cal.setTime(getDate);
-            int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-            diaryDate.setText(week[w] + "");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
+        // 디비 데이터를 사용해 라디오버튼 셋팅
+        if (diary.getdEmotion() == "좋아") {
+            emotionCheckedId = R.id.btn_smile;
+            isEmotionChecking = true;
+            btnSmile.setTextSize(23);
+            btnSoso.setTextSize(18);
+            btnAngry.setTextSize(18);
+            btnHappy.setTextSize(18);
+            btnRelax.setTextSize(18);
+            btnSad.setTextSize(18);
+        } else if (diary.getdEmotion() == "그냥 그래") {
+            emotionCheckedId = R.id.btn_soso;
+            isEmotionChecking = true;
+            btnSmile.setTextSize(18);
+            btnSoso.setTextSize(23);
+            btnAngry.setTextSize(18);
+            btnHappy.setTextSize(18);
+            btnRelax.setTextSize(18);
+            btnSad.setTextSize(18);
+        } else if (diary.getdEmotion() == "화나") {
+            emotionCheckedId = R.id.btn_angry;
+            isEmotionChecking = true;
+            btnSmile.setTextSize(18);
+            btnSoso.setTextSize(18);
+            btnAngry.setTextSize(23);
+            btnHappy.setTextSize(18);
+            btnRelax.setTextSize(18);
+            btnSad.setTextSize(18);
+        } else if (diary.getdEmotion() == "행복해") {
+            emotionCheckedId = R.id.btn_happy;
+            isEmotionChecking = true;
+            btnSmile.setTextSize(18);
+            btnSoso.setTextSize(18);
+            btnAngry.setTextSize(18);
+            btnHappy.setTextSize(23);
+            btnRelax.setTextSize(18);
+            btnSad.setTextSize(18);
+        } else if (diary.getdEmotion() == "편안해") {
+            emotionCheckedId = R.id.btn_relax;
+            isEmotionChecking = true;
+            btnSmile.setTextSize(18);
+            btnSoso.setTextSize(18);
+            btnAngry.setTextSize(18);
+            btnHappy.setTextSize(18);
+            btnRelax.setTextSize(23);
+            btnSad.setTextSize(18);
+        } else if (diary.getdEmotion() == "슬퍼") {
+            emotionCheckedId = R.id.btn_sad;
+            isEmotionChecking = true;
+            btnSmile.setTextSize(18);
+            btnSoso.setTextSize(18);
+            btnAngry.setTextSize(18);
+            btnHappy.setTextSize(18);
+            btnRelax.setTextSize(18);
+            btnSad.setTextSize(23);
         }
 
-        diarySetDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                calendar = Calendar.getInstance();
+        // 디비 데이터를 사용해 이모지 셋팅
+        switch (diary.getdEmoji()) {
+            case 1:
+                diaryEmoji.setImageResource(R.drawable.good_ubu_1);
+                break;
+            case 2:
+                diaryEmoji.setImageResource(R.drawable.slaver_ubu_2);
+                break;
+            case 3:
+                diaryEmoji.setImageResource(R.drawable.suprised_ubu_3);
+                break;
+            case 4:
+                diaryEmoji.setImageResource(R.drawable.study_ubu_4);
+                break;
+            case 5:
+                diaryEmoji.setImageResource(R.drawable.drawing_ubu_5);
+                break;
+            case 6:
+                diaryEmoji.setImageResource(R.drawable.singing_ubu_6);
+                break;
+            case 7:
+                diaryEmoji.setImageResource(R.drawable.yes_ubu_7);
+                break;
+            case 8:
+                diaryEmoji.setImageResource(R.drawable.no_ubu_8);
+                break;
+            case 9:
+                diaryEmoji.setImageResource(R.drawable.dont_know_ubu_9);
+                break;
+            case 10:
+                diaryEmoji.setImageResource(R.drawable.music_ubu_10);
+                break;
+            case 11:
+                diaryEmoji.setImageResource(R.drawable.fish_ubu_11);
+                break;
+            case 12:
+                diaryEmoji.setImageResource(R.drawable.ubu_fish_12);
+                break;
+            case 13:
+                diaryEmoji.setImageResource(R.drawable.muffin_ubu_13);
+                break;
+            case 14:
+                diaryEmoji.setImageResource(R.drawable.hungry_ubu_14);
+                break;
+            case 15:
+                diaryEmoji.setImageResource(R.drawable.cooking_ubu_15);
+                break;
+            case 16:
+                diaryEmoji.setImageResource(R.drawable.sorry_ubu_16);
+                break;
+            case 17:
+                diaryEmoji.setImageResource(R.drawable.shy_ubu_17);
+                break;
+            case 18:
+                diaryEmoji.setImageResource(R.drawable.sad_ubu_18);
+                break;
+            case 19:
+                diaryEmoji.setImageResource(R.drawable.exercise_ubu_19);
+                break;
+            case 20:
+                diaryEmoji.setImageResource(R.drawable.skateboard_ubu_20);
+                break;
+            case 21:
+                diaryEmoji.setImageResource(R.drawable.aerobics_ubu_21);
+                break;
+            case 22:
+                diaryEmoji.setImageResource(R.drawable.ringring_ubu_22);
+                break;
+            case 23:
+                diaryEmoji.setImageResource(R.drawable.watch_ubu_23);
+                break;
+            case 24:
+                diaryEmoji.setImageResource(R.drawable.angry_ubu_24);
+                break;
+            case 25:
+                diaryEmoji.setImageResource(R.drawable.congrats_ubu_25);
+                break;
+            case 26:
+                diaryEmoji.setImageResource(R.drawable.love_ubu_26);
+                break;
+            case 27:
+                diaryEmoji.setImageResource(R.drawable.gift_ubu_27);
+                break;
+            case 28:
+                diaryEmoji.setImageResource(R.drawable.wash_ubu_28);
+                break;
+            case 29:
+                diaryEmoji.setImageResource(R.drawable.brush_teeth_ubu_29);
+                break;
+            case 30:
+                diaryEmoji.setImageResource(R.drawable.tired_ubu_30);
+                break;
+            case 31:
+                diaryEmoji.setImageResource(R.drawable.phone_ubu_31);
+                break;
+        }
 
-                int currentYear = calendar.get(Calendar.YEAR);
-                int currentMonth = calendar.get(Calendar.MONTH);
-                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+        diaryContent.setText(diary.getdContent());
 
-                DatePickerDialog.OnDateSetListener dDateSetListener =
-                        new DatePickerDialog.OnDateSetListener() {
-                            // onDateSet method
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                diaryYear.setText((year) + "");
-                                if (monthOfYear < 10) {
-                                    diaryMonth.setText("0" + (monthOfYear + 1) + "");
-                                } else {
-                                    diaryMonth.setText((monthOfYear + 1) + "");
-                                }
-                                if (dayOfMonth < 10) {
-                                    diaryDay.setText("0" + (dayOfMonth) + "");
-                                } else {
-                                    diaryDay.setText((dayOfMonth) + "");
-                                }
+        // 디비 데이터를 이용해 사진 셋팅
+        try {
+            diaryPhoto.setImageURI(Uri.parse(diary.getdPhoto()));
+        } catch (Exception e) {
+            diaryPhoto.setVisibility(GONE);
+//            holder.dPhotoWarning.setVisibility(View.VISIBLE);
+        }
 
-                                // 위의 날짜에 해당하는 요일
-                                String day = diaryYear.getText().toString() + diaryMonth.getText().toString() + diaryDay.getText().toString();
-                                String[] week = {"일", "월", "화", "수", "목", "금", "토"};
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-
-                                Calendar cal = Calendar.getInstance();
-                                Date getDate;
-                                try {
-                                    getDate = dateFormat.parse(day);
-                                    cal.setTime(getDate);
-                                    int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-                                    diaryDate.setText(week[w] + "");
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        };
-                DatePickerDialog dialog = new DatePickerDialog(AddActivity.this, dDateSetListener, currentYear, currentMonth, currentDay);
-                dialog.show();
-            }
-        });
-
-
-        emotionRadioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        // 기능
+       emotionRadioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId != -1 && isEmotionChecking) {
                     isEmotionChecking = false;
                     emotionRadioGroup2.clearCheck();
                     emotionCheckedId = checkedId;
-
-//                    if (emotionCheckedId == R.id.btn_smile) {
-//                        btnSmile.setTextSize(23);
-//                    } else if (emotionCheckedId == R.id.btn_soso) {
-//                        btnSoso.setTextSize(23);
-//                    } else if (emotionCheckedId == R.id.btn_angry) {
-//                        btnAngry.setTextSize(23);
-//                    }
                 }
                 isEmotionChecking = true;
 
@@ -236,14 +313,6 @@ public class AddActivity extends Activity {
                     isEmotionChecking = false;
                     emotionRadioGroup1.clearCheck();
                     emotionCheckedId = checkedId;
-
-//                    if (emotionCheckedId == R.id.btn_happy) {
-//                        btnHappy.setTextSize(23);
-//                    } else if (emotionCheckedId == R.id.btn_relax) {
-//                        btnRelax.setTextSize(23);
-//                    } else if (emotionCheckedId == R.id.btn_sad) {
-//                        btnSad.setTextSize(23);
-//                    }
                 }
                 isEmotionChecking = true;
 
@@ -272,16 +341,15 @@ public class AddActivity extends Activity {
             }
         });
 
-
         diaryEmoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Rect displayRectangle = new Rect();
 
-                Window window = AddActivity.this.getWindow();
+                Window window = EditActivity.this.getWindow();
                 window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(AddActivity.this, R.style.CustomAlertDialog);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this, R.style.CustomAlertDialog);
 
                 ViewGroup viewGroup = findViewById(android.R.id.content);
                 final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.custom_dialog, viewGroup, false);
@@ -296,7 +364,7 @@ public class AddActivity extends Activity {
                 Button btnOk = dialogView.findViewById(R.id.btnOk);
                 final GridView emojiGridView = dialogView.findViewById(R.id.diaryEmojiGridView);
 
-                final EmojiGridViewAdapter emojiGridViewAdapter = new EmojiGridViewAdapter(AddActivity.this, R.layout.row);
+                final EmojiGridViewAdapter emojiGridViewAdapter = new EmojiGridViewAdapter(EditActivity.this, R.layout.row);
                 emojiGridView.setAdapter(emojiGridViewAdapter);
 
                 emojiGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -307,38 +375,102 @@ public class AddActivity extends Activity {
                         diaryEmoji.setImageResource(imgs[position]);
 
                         switch (position) {
-                            case 0: dEmoji = 1; break;
-                            case 1: dEmoji = 2; break;
-                            case 2: dEmoji = 3; break;
-                            case 3: dEmoji = 4; break;
-                            case 4: dEmoji = 5; break;
-                            case 5: dEmoji = 6; break;
-                            case 6: dEmoji = 7; break;
-                            case 7: dEmoji = 8; break;
-                            case 8: dEmoji = 9; break;
-                            case 9: dEmoji = 10; break;
-                            case 10: dEmoji = 11; break;
-                            case 11: dEmoji = 12; break;
-                            case 12: dEmoji = 13; break;
-                            case 13: dEmoji = 14; break;
-                            case 14: dEmoji = 15; break;
-                            case 15: dEmoji = 16; break;
-                            case 16: dEmoji = 17; break;
-                            case 17: dEmoji = 18; break;
-                            case 18: dEmoji = 19; break;
-                            case 19: dEmoji = 20; break;
-                            case 20: dEmoji = 21; break;
-                            case 21: dEmoji = 22; break;
-                            case 22: dEmoji = 23; break;
-                            case 23: dEmoji = 24; break;
-                            case 24: dEmoji = 25; break;
-                            case 25: dEmoji = 26; break;
-                            case 26: dEmoji = 27; break;
-                            case 27: dEmoji = 28; break;
-                            case 28: dEmoji = 29; break;
-                            case 29: dEmoji = 30; break;
-                            case 30: dEmoji = 31; break;
-                            case 31: dEmoji = 32; break;
+                            case 0:
+                                dEmoji = 1;
+                                break;
+                            case 1:
+                                dEmoji = 2;
+                                break;
+                            case 2:
+                                dEmoji = 3;
+                                break;
+                            case 3:
+                                dEmoji = 4;
+                                break;
+                            case 4:
+                                dEmoji = 5;
+                                break;
+                            case 5:
+                                dEmoji = 6;
+                                break;
+                            case 6:
+                                dEmoji = 7;
+                                break;
+                            case 7:
+                                dEmoji = 8;
+                                break;
+                            case 8:
+                                dEmoji = 9;
+                                break;
+                            case 9:
+                                dEmoji = 10;
+                                break;
+                            case 10:
+                                dEmoji = 11;
+                                break;
+                            case 11:
+                                dEmoji = 12;
+                                break;
+                            case 12:
+                                dEmoji = 13;
+                                break;
+                            case 13:
+                                dEmoji = 14;
+                                break;
+                            case 14:
+                                dEmoji = 15;
+                                break;
+                            case 15:
+                                dEmoji = 16;
+                                break;
+                            case 16:
+                                dEmoji = 17;
+                                break;
+                            case 17:
+                                dEmoji = 18;
+                                break;
+                            case 18:
+                                dEmoji = 19;
+                                break;
+                            case 19:
+                                dEmoji = 20;
+                                break;
+                            case 20:
+                                dEmoji = 21;
+                                break;
+                            case 21:
+                                dEmoji = 22;
+                                break;
+                            case 22:
+                                dEmoji = 23;
+                                break;
+                            case 23:
+                                dEmoji = 24;
+                                break;
+                            case 24:
+                                dEmoji = 25;
+                                break;
+                            case 25:
+                                dEmoji = 26;
+                                break;
+                            case 26:
+                                dEmoji = 27;
+                                break;
+                            case 27:
+                                dEmoji = 28;
+                                break;
+                            case 28:
+                                dEmoji = 29;
+                                break;
+                            case 29:
+                                dEmoji = 30;
+                                break;
+                            case 30:
+                                dEmoji = 31;
+                                break;
+                            case 31:
+                                dEmoji = 32;
+                                break;
                         }
                     }
                 });
@@ -366,7 +498,7 @@ public class AddActivity extends Activity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intentHome = new Intent(AddActivity.this, MainActivity.class);
+                Intent intentHome = new Intent(EditActivity.this, MainActivity.class);
                 intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intentHome.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 startActivity(intentHome);
@@ -398,7 +530,7 @@ public class AddActivity extends Activity {
                         dEmotion = "슬퍼";
                     }
                 } catch (Exception e) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AddActivity.this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this);
                     builder.setTitle("있잖아요");
                     builder.setMessage("오늘 기분을 선택해주세요");
 
@@ -432,55 +564,12 @@ public class AddActivity extends Activity {
                     dPhoto = null;
                 }
 
-                // 해당 날짜에 이미 일기가 있다면
-                Diary diary = DBHelper.dGetDiary(dYear, dMonth, dDay);
-                Log.d(TAG, "onClick: ObjectUtils.isEmpty(DBHelper.dGetDiary(dYear, dMonth, dDay) " + ObjectUtils.isEmpty(diary));
-                if (ObjectUtils.isEmpty(DBHelper.dGetDiary(dYear, dMonth, dDay)) == false) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(AddActivity.this);
-                    builder.setTitle("있잖아요").setMessage("이 날 일기 이미 있는데 바꿀래요?");
+                DBHelper.dUpdate(dYear, dMonth, dDay, dDate, dEmotion, dEmoji, dContent, dPhoto);
 
-                    // 확인 버튼
-                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            DBHelper.dUpdate(dYear, dMonth, dDay, dDate, dEmotion, dEmoji, dContent, dPhoto);
-
-                            Toast.makeText(getApplicationContext(), "바꿨어요!", Toast.LENGTH_SHORT).show();
-
-                            Intent intentHome = new Intent(AddActivity.this, MainActivity.class);
-                            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(intentHome);
-
-                            dialog.dismiss();
-
-                            finish();
-                        }
-                    });
-
-                    // 취소 버튼
-                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-//                            Intent intentHome = new Intent(AddActivity.this, MainActivity.class);
-//                            intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                            startActivity(intentHome);
-
-                            dialog.dismiss();
-
-                            finish();
-                        }
-                    });
-
-                    builder.show();
-
-                } else {
-                    DBHelper.dInsert(dYear, dMonth, dDay, dDate, dEmotion, dEmoji, dContent, dPhoto);
-
-                    Intent intentHome = new Intent(AddActivity.this, MainActivity.class);
-                    intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(intentHome);
-                    finish();
-                }
+                Intent intentHome = new Intent(EditActivity.this, MainActivity.class);
+                intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intentHome);
+                finish();
             }
         });
     }
@@ -510,6 +599,14 @@ public class AddActivity extends Activity {
                     } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
                         matrix.postRotate(270);
                     }
+//                    ExifInterface exif = new ExifInterface(uri.getPath());
+//                    int exifOrientation = exif.getAttributeInt(
+//                            ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+//                    int exifDegree = exifOrientationToDegrees(exifOrientation);
+//
+//                    img = rotate(img, exifDegree);
+//                    diaryPhoto.setImageBitmap(img);
+//                } catch(Exception e) {}
 
                     diaryPhoto.setImageBitmap(img);
                 } catch (Exception e) {
@@ -519,6 +616,17 @@ public class AddActivity extends Activity {
                 Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    public int exifOrientationToDegrees(int exifOrientation){
+        if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
+            return 90;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
+            return 180;
+        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+
+            return 270;
+        } return 0;
     }
 
     public static class ObjectUtils {
@@ -541,5 +649,4 @@ public class AddActivity extends Activity {
             return false;
         }
     }
-
 }

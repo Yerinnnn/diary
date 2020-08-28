@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/grid"
+    android:background="@drawable/background_grid"
     android:orientation="vertical">
 
     <LinearLayout
@@ -37,11 +37,11 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
             android:orientation="vertical"
-            android:padding="25dp">
+            android:padding="32dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -61,7 +61,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
-                        android:textSize="18sp"
                         android:text="2020"
                         android:textColor="@color/textPrimary" />
 
@@ -70,7 +69,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="년 "
-                        android:textSize="18sp"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
@@ -79,7 +77,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="5"
-                        android:textSize="18sp"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
@@ -87,7 +84,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="월 "
-                        android:textSize="18sp"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
@@ -96,7 +92,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="24"
-                        android:textSize="18sp"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
@@ -104,15 +99,6 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="일 "
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/barunhippie"
-                        android:text="("
-                        android:textSize="18sp"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
@@ -121,15 +107,13 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="일"
-                        android:textSize="18sp"
                         android:textColor="@color/textPrimary" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
-                        android:text=")"
-                        android:textSize="18sp"
+                        android:text="요일"
                         android:textColor="@color/textPrimary" />
                 </LinearLayout>
 
@@ -152,7 +136,7 @@
                             android:gravity="center"
                             android:text="좋아"
                             android:textColor="@color/color_good"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <RadioButton
                             android:id="@+id/btn_soso"
@@ -162,7 +146,7 @@
                             android:gravity="center"
                             android:text="그냥 그래"
                             android:textColor="@color/color_soso"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <RadioButton
                             android:id="@+id/btn_angry"
@@ -172,7 +156,7 @@
                             android:gravity="center"
                             android:text="화나"
                             android:textColor="@color/color_angry"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
                     </RadioGroup>
 
                     <RadioGroup
@@ -190,7 +174,7 @@
                             android:gravity="center"
                             android:text="행복해"
                             android:textColor="@color/color_happy"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <RadioButton
                             android:id="@+id/btn_relax"
@@ -200,7 +184,7 @@
                             android:gravity="center"
                             android:text="편안해"
                             android:textColor="@color/color_relax"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
 
                         <RadioButton
                             android:id="@+id/btn_sad"
@@ -211,7 +195,7 @@
                             android:gravity="center"
                             android:text="슬퍼"
                             android:textColor="@color/color_sad"
-                            android:textSize="18sp" />
+                            android:textSize="15sp" />
                     </RadioGroup>
                 </LinearLayout>
 
@@ -220,7 +204,7 @@
                     android:id="@+id/diaryEmoji"
                     android:layout_width="250dp"
                     android:layout_height="250dp"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="30dp"
                     android:src="@drawable/add_ubu">
 
                 </ImageView>
@@ -231,7 +215,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:background="@color/backgroundYellow"
+                    android:background="@drawable/border_layout"
                     android:fontFamily="@font/barunhippie"
                     android:gravity="top"
                     android:hint="일기를 적어보세요 :)"
@@ -244,9 +228,8 @@
                 <ImageView
                     android:id="@+id/diaryPhoto"
                     android:layout_width="wrap_content"
-                    android:layout_height="250dp"
-                    android:maxHeight="400dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:src="@drawable/add_ubu">
 
                 </ImageView>

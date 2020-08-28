@@ -70,10 +70,6 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void dUpdate(String dYear, String dMonth, String dDay, String dDate, String dEmotion, int dEmoji, String dContent, String dPhoto) {
         SQLiteDatabase db = getWritableDatabase();
-//        String query = "UPDATE diary SET dEmotion=(?) AND dEmoji=(?) AND dContent=(?) AND dPhoto=(?) WHERE dYear=(?) AND dMonth=(?) AND dDay=(?);";
-//        String query = "UPDATE (SELECT dEmotion, dEmoji, dContent, dPhoto WHERE dYear='" + dYear + "'AND dMonth='" + dMonth + "'AND dDay='" + dDay + "') SET dEmotion=(?), dEmoji=(?), dContent=(?), dPhoto=(?);";
-//        String query = "UPDATE diary SET (dEmotion, dEmoji, dContent, dPhoto) = (?, ?, ?, ?)  WHERE dYear='" + dYear + "'AND dMonth='" + dMonth + "'AND dDay='" + dDay + "';";
-
         db.execSQL("DELETE FROM diary WHERE dYear = '" + dYear + "' AND dMonth = '" + dMonth + "' AND dDay = '" + dDay + "';");
 //        String queryDelete = "DELETE FROM diary WHERE dYear = '" + dYear + "', dMonth = '" + dMonth + "', dDay = '" + dDay + "';";
 
@@ -99,12 +95,14 @@ public class DbHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void dDelete(String dContent) {
+    public void dDelete(String dYear, String dMonth, String dDay) {
         SQLiteDatabase db = getWritableDatabase();
-        String query = "DELETE FROM diary WHERE dContent=(?)";
+        String query = "DELETE FROM diary WHERE dYear=(?) AND dMonth=(?) AND dDay=(?)";
         SQLiteStatement sqLiteStatement = db.compileStatement(query);
 
-        sqLiteStatement.bindString(1, String.valueOf(dContent));
+        sqLiteStatement.bindString(1, String.valueOf(dYear));
+        sqLiteStatement.bindString(2, String.valueOf(dMonth));
+        sqLiteStatement.bindString(3, String.valueOf(dDay));
 
         db.close();
     }
@@ -125,9 +123,12 @@ public class DbHelper extends SQLiteOpenHelper {
         String dPhoto = null;
         Diary result = null;
 
+        Log.d(TAG, "dGetDiary: dYear: " + dYear);
+
         SQLiteDatabase db = getReadableDatabase();
+
         Cursor cursor = db.rawQuery("SELECT * FROM diary WHERE dYear='" + dYear + "'AND dMonth='" +
-                dMonth + "'AND dDay='" + dDay + "' ORDER BY dDay DESC;", null);
+                dMonth + "'AND dDay='" + dDay + "';", null);
 
         while (cursor.moveToNext()) {
             dYear = cursor.getString(1);
@@ -139,7 +140,15 @@ public class DbHelper extends SQLiteOpenHelper {
             dContent = cursor.getString(7);
             dPhoto = cursor.getString(8);
 
+            if (dPhoto != null) {
+                dPhoto = cursor.getString(8);
+            } else if (dPhoto == null) {
+                dPhoto = null;
+            }
+
             result = new Diary(dYear, dMonth, dDay, dDate, dEmotion, dEmoji, dContent, dPhoto);
+
+            Log.d(TAG, "dGetDiary: result dYear: " + result.getdYear());
         }
         return result;
     }

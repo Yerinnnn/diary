@@ -15,11 +15,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.yerin.diary.ContentActivity" />
-        <activity android:name="com.yerin.diary.AddActivity" />
+        <activity android:name=".ContentActivity" />
+        <activity android:name=".AddActivity" />
         <activity android:name=".EmojiActivity" />
         <activity android:name=".SettingActivity" />
         <activity android:name=".MainActivity" />
+        <activity android:name=".EditActivity" />
     </application>
 
 </manifest>
