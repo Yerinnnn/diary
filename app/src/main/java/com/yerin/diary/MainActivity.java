@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
         // 리사이클러뷰 탑재
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setNestedScrollingEnabled(false);
 
         DBHelper = new DbHelper(getApplicationContext(), "diary", null, 1);
         db = DBHelper.getWritableDatabase();
@@ -203,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
+//                ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(dList.size(), 0);
             }
         });
     }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:layout_margin="20dp"
+    android:background="@color/backgroundYellow"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/dialogType"
+        android:layout_width="match_parent"
+        android:text="삭제"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/barunhippie"
+        android:textSize="25sp"
+        android:layout_height="wrap_content"></TextView>
+
+    <TextView
+        android:id="@+id/dialogMessage"
+        android:layout_width="match_parent"
+        android:text="삭제하시면 복구하실 수 없습니다.\n정말로 삭제하시겠습니까?"
+        android:fontFamily="@font/barunhippie"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"></TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnCancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/btnOliver"
+            android:fontFamily="@font/barunhippie"
+            android:text="취소"
+            android:textAllCaps="false"
+            android:textColor="@color/textPrimary" />
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/btnOliver"
+            android:fontFamily="@font/barunhippie"
+            android:text="확인"
+            android:textAllCaps="false"
+            android:textColor="@color/textPrimary" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.yerin.diary;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -12,6 +13,8 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,14 +34,21 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+import com.soundcloud.android.crop.Crop;
+
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import static android.content.ContentValues.TAG;
 import static android.view.View.GONE;
-import static java.lang.System.in;
-import static java.util.Collections.rotate;
 
 public class EditActivity extends Activity {
     private LinearLayout diarySetDate;
@@ -60,6 +70,15 @@ public class EditActivity extends Activity {
 
     private static final int REQUEST_CODE = 0;
     private Uri uri;
+    private Uri savingUri;
+
+    private Boolean isCamera = false;
+    private Boolean isPermission = true;
+
+    private static final int PICK_FROM_ALBUM = 1;
+    private static final int PICK_FROM_CAMERA = 2;
+
+    private File tempFile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +114,10 @@ public class EditActivity extends Activity {
         dMonth = intent.getStringExtra("dMonth");
         dDay = intent.getStringExtra("dDay");
         dDate = intent.getStringExtra("dDate");
+        dEmotion = intent.getStringExtra("dEmotion");
+        dEmoji = intent.getIntExtra("dEmoji", 1);
+        dContent = intent.getStringExtra("dContent");
+        dPhoto = intent.getStringExtra("dPhoto");
 
         diaryYear.setText(dYear);
         diaryMonth.setText(dMonth);
@@ -106,8 +129,8 @@ public class EditActivity extends Activity {
 
         diary = DBHelper.dGetDiary(dYear, dMonth, dDay);
 
-        // 디비 데이터를 사용해 라디오버튼 셋팅
-        if (diary.getdEmotion() == "좋아") {
+        // 인텐트 데이터를 사용해 라디오버튼 셋팅
+        if (dEmotion == "좋아") {
             emotionCheckedId = R.id.btn_smile;
             isEmotionChecking = true;
             btnSmile.setTextSize(23);
@@ -116,7 +139,7 @@ public class EditActivity extends Activity {
             btnHappy.setTextSize(18);
             btnRelax.setTextSize(18);
             btnSad.setTextSize(18);
-        } else if (diary.getdEmotion() == "그냥 그래") {
+        } else if (dEmotion == "그냥 그래") {
             emotionCheckedId = R.id.btn_soso;
             isEmotionChecking = true;
             btnSmile.setTextSize(18);
@@ -125,7 +148,7 @@ public class EditActivity extends Activity {
             btnHappy.setTextSize(18);
             btnRelax.setTextSize(18);
             btnSad.setTextSize(18);
-        } else if (diary.getdEmotion() == "화나") {
+        } else if (dEmotion == "화나") {
             emotionCheckedId = R.id.btn_angry;
             isEmotionChecking = true;
             btnSmile.setTextSize(18);
@@ -134,7 +157,7 @@ public class EditActivity extends Activity {
             btnHappy.setTextSize(18);
             btnRelax.setTextSize(18);
             btnSad.setTextSize(18);
-        } else if (diary.getdEmotion() == "행복해") {
+        } else if (dEmotion == "행복해") {
             emotionCheckedId = R.id.btn_happy;
             isEmotionChecking = true;
             btnSmile.setTextSize(18);
@@ -143,7 +166,7 @@ public class EditActivity extends Activity {
             btnHappy.setTextSize(23);
             btnRelax.setTextSize(18);
             btnSad.setTextSize(18);
-        } else if (diary.getdEmotion() == "편안해") {
+        } else if (dEmotion == "편안해") {
             emotionCheckedId = R.id.btn_relax;
             isEmotionChecking = true;
             btnSmile.setTextSize(18);
@@ -152,7 +175,7 @@ public class EditActivity extends Activity {
             btnHappy.setTextSize(18);
             btnRelax.setTextSize(23);
             btnSad.setTextSize(18);
-        } else if (diary.getdEmotion() == "슬퍼") {
+        } else if (dEmotion == "슬퍼") {
             emotionCheckedId = R.id.btn_sad;
             isEmotionChecking = true;
             btnSmile.setTextSize(18);
@@ -164,7 +187,7 @@ public class EditActivity extends Activity {
         }
 
         // 디비 데이터를 사용해 이모지 셋팅
-        switch (diary.getdEmoji()) {
+        switch (dEmoji) {
             case 1:
                 diaryEmoji.setImageResource(R.drawable.good_ubu_1);
                 break;
@@ -260,7 +283,7 @@ public class EditActivity extends Activity {
                 break;
         }
 
-        diaryContent.setText(diary.getdContent());
+        diaryContent.setText(dContent);
 
         // 디비 데이터를 이용해 사진 셋팅
         try {
@@ -352,7 +375,7 @@ public class EditActivity extends Activity {
                 final AlertDialog.Builder builder = new AlertDialog.Builder(EditActivity.this, R.style.CustomAlertDialog);
 
                 ViewGroup viewGroup = findViewById(android.R.id.content);
-                final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.custom_dialog, viewGroup, false);
+                final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_emoji, viewGroup, false);
                 dialogView.setMinimumWidth((int) (displayRectangle.width() * 1f - 50));
                 dialogView.setMinimumHeight((int) (displayRectangle.height() * 1f - 50));
 
@@ -488,10 +511,11 @@ public class EditActivity extends Activity {
         diaryPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(intent, REQUEST_CODE);
+                tedPermission();
+
+                if (isPermission) goToAlbum();
+                else
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.permission_2), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -558,10 +582,12 @@ public class EditActivity extends Activity {
                     dContent = "";
                 }
 
-                try {
-                    dPhoto = uri.toString();
-                } catch (Exception e) {
-                    dPhoto = null;
+                if (dPhoto != diary.getdPhoto()) {
+                    try {
+                        dPhoto = savingUri.toString();
+                    } catch (Exception e) {
+                        dPhoto = null;
+                    }
                 }
 
                 DBHelper.dUpdate(dYear, dMonth, dDay, dDate, dEmotion, dEmoji, dContent, dPhoto);
@@ -574,79 +600,118 @@ public class EditActivity extends Activity {
         });
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
-                try {
-                    uri = data.getData();
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(this, "취소 되었습니다.", Toast.LENGTH_SHORT).show();
 
-                    InputStream in = getContentResolver().openInputStream(data.getData());
+            if (tempFile != null) {
+                if (tempFile.exists()) {
 
-                    Bitmap img = BitmapFactory.decodeStream(in);
-
-                    ExifInterface exif = new ExifInterface(getContentResolver().openInputStream(uri));
-
-                    in.close();
-
-                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-                    Matrix matrix = new Matrix();
-                    if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-                        matrix.postRotate(90);
-                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-                        matrix.postRotate(180);
-                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-                        matrix.postRotate(270);
+                    if (tempFile.delete()) {
+                        Log.e(TAG, tempFile.getAbsolutePath() + " 삭제 성공");
+                        tempFile = null;
                     }
-//                    ExifInterface exif = new ExifInterface(uri.getPath());
-//                    int exifOrientation = exif.getAttributeInt(
-//                            ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-//                    int exifDegree = exifOrientationToDegrees(exifOrientation);
-//
-//                    img = rotate(img, exifDegree);
-//                    diaryPhoto.setImageBitmap(img);
-//                } catch(Exception e) {}
-
-                    diaryPhoto.setImageBitmap(img);
-                } catch (Exception e) {
-
                 }
-            } else if (resultCode == RESULT_CANCELED) {
-                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
+            }
+            return;
+        }
+
+        switch (requestCode) {
+            case PICK_FROM_ALBUM: {
+                Uri photoUri = data.getData();
+                Log.d(TAG, "PICK_FROM_ALBUM photoUri : " + photoUri);
+
+                cropImage(photoUri);
+
+                break;
+            }
+            case Crop.REQUEST_CROP: {
+                // File cropFile = new File(Crop.getOutput(data).getPath());
+                setImage();
             }
         }
     }
 
-    public int exifOrientationToDegrees(int exifOrientation){
-        if(exifOrientation == ExifInterface.ORIENTATION_ROTATE_90) {
-            return 90;
-        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_180) {
-            return 180;
-        } else if (exifOrientation == ExifInterface.ORIENTATION_ROTATE_270) {
+    // 앨범에서 이미지 가져오기
+    private void goToAlbum() {
+        isCamera = false;
 
-            return 270;
-        } return 0;
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+        startActivityForResult(intent, PICK_FROM_ALBUM);
     }
 
-    public static class ObjectUtils {
-        public static boolean isEmpty(Object s) {
-            if (s == null) {
-                return true;
-            }
-            if ((s instanceof String) && (((String) s).trim().length() == 0)) {
-                return true;
-            }
-            if (s instanceof Map) {
-                return ((Map<?, ?>) s).isEmpty();
-            }
-            if (s instanceof List) {
-                return ((List<?>) s).isEmpty();
-            }
-            if (s instanceof Object[]) {
-                return (((Object[]) s).length == 0);
-            }
-            return false;
+    // 이미지 crop
+    private void cropImage(Uri photoUri) {
+        // 갤러리에서 선택한 경우에는 tempFile 이 없으므로 새로 생성해야함
+        try {
+            tempFile = createImageFile();
+        } catch (IOException e) {
+            Toast.makeText(this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            finish();
+            e.printStackTrace();
         }
+
+        //크롭 후 저장할 Uri
+        savingUri = Uri.fromFile(tempFile);
+
+        Crop.of(photoUri, savingUri).start(this);
+    }
+
+    // 폴더 및 파일 만들기
+    private File createImageFile() throws IOException {
+
+        // 이미지 파일 이름 ( diary_{시간}_ )
+        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+        String imageFileName = "diary_" + timeStamp + "_";
+        Log.d(TAG, "createImageFile: imageFileName: " + imageFileName);
+
+        // 이미지가 저장될 폴더 이름 ( Diary )
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                + File.separator + "/Diary/");
+        if (!storageDir.exists()) storageDir.mkdirs();
+        Log.d(TAG, "createImageFile: storageDir: " + storageDir);
+
+        // 파일 생성
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        Log.d(TAG, "createImageFile : " + image.getAbsolutePath());
+
+        return image;
+    }
+
+    // tempfile을 bitmap으로 변환 후 imageview에 setImage
+    private void setImage() {
+        diaryPhoto.setImageURI(savingUri);
+
+        // tempFile 사용 후 null 처리가 필요
+        // (resultCode != RESULT_OK) 일 때 tempFile 을 삭제하기 때문에
+        // 기존에 데이터가 남아있게 되면 원치 않은 삭제가 이루어질 수 있음
+        tempFile = null;
+
+    }
+    // 권한 설정
+    private void tedPermission() {
+
+        PermissionListener permissionListener = new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                // 권한 요청 성공
+                isPermission = true;
+            }
+
+            @Override
+            public void onPermissionDenied(ArrayList<String> deniedPermissions) {
+                // 권한 요청 실패
+                isPermission = false;
+            }
+        };
+
+        TedPermission.with(this)
+                .setPermissionListener(permissionListener)
+                .setRationaleMessage(getResources().getString(R.string.permission_2))
+                .setDeniedMessage(getResources().getString(R.string.permission_1))
+                .setPermissions(Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA)
+                .check();
     }
 }

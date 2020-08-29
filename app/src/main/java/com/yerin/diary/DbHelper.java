@@ -97,12 +97,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
     public void dDelete(String dYear, String dMonth, String dDay) {
         SQLiteDatabase db = getWritableDatabase();
-        String query = "DELETE FROM diary WHERE dYear=(?) AND dMonth=(?) AND dDay=(?)";
-        SQLiteStatement sqLiteStatement = db.compileStatement(query);
+        db.execSQL("DELETE FROM diary WHERE dYear = '" + dYear + "' AND dMonth = '" + dMonth + "' AND dDay = '" + dDay + "';");
 
-        sqLiteStatement.bindString(1, String.valueOf(dYear));
-        sqLiteStatement.bindString(2, String.valueOf(dMonth));
-        sqLiteStatement.bindString(3, String.valueOf(dDay));
+//        String query = "DELETE FROM diary WHERE dYear=(?) AND dMonth=(?) AND dDay=(?)";
+//        SQLiteStatement sqLiteStatement = db.compileStatement(query);
+
+//        sqLiteStatement.bindString(1, String.valueOf(dYear));
+//        sqLiteStatement.bindString(2, String.valueOf(dMonth));
+//        sqLiteStatement.bindString(3, String.valueOf(dDay));
 
         db.close();
     }
@@ -183,9 +185,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 dPhoto = null;
             }
 //
-        // 모든 데이터 객체에 저장
-        Diary results = new Diary(dYear, dMonth, dDay, dDate, dEmotion, dEmoji, dContent, dPhoto);
-        list.add(results);
+            // 모든 데이터 객체에 저장
+            Diary results = new Diary(dYear, dMonth, dDay, dDate, dEmotion, dEmoji, dContent, dPhoto);
+            list.add(results);
         }
         return list;
     }

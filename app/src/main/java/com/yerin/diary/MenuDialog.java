@@ -35,7 +35,7 @@ public class MenuDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
 
-        View dialog = inflater.inflate(R.layout.diary_menu_dialog, null);
+        View dialog = inflater.inflate(R.layout.dialog_diary_menu, null);
         DBHelper = new DbHelper(getContext(), "diary", null, 1);
 
 

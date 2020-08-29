@@ -2,19 +2,27 @@ package com.yerin.diary;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
@@ -29,7 +37,8 @@ import static android.view.View.GONE;
 import static java.lang.System.out;
 
 public class ContentActivity extends Activity {
-    private String dYear, dMonth, dDay, dDate;
+    private String dYear, dMonth, dDay, dDate, dEmotion, dContent, dPhoto;
+    private int dEmoji;
 
     private Diary diary;
     private DbHelper DBHelper;
@@ -44,7 +53,7 @@ public class ContentActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_content);
-        DBHelper = new DbHelper(getApplicationContext(), "diary", null, 1);
+        DBHelper = new DbHelper(ContentActivity.this, "diary", null, 1);
 
         // xml 요소 연결
         btnBack = findViewById(R.id.btnBack);
@@ -63,7 +72,7 @@ public class ContentActivity extends Activity {
 
 
         // DiaryAdapter에서 intent로 보낸 데이터 받기
-        Intent intent = getIntent();
+        final Intent intent = getIntent();
 
         dYear = intent.getStringExtra("dYear");
         dMonth = intent.getStringExtra("dMonth");
@@ -75,6 +84,11 @@ public class ContentActivity extends Activity {
 
         // intent로 받은 데이터를 이용해 디비에서 데이터 가져오기
         diary = DBHelper.dGetDiary(dYear, dMonth, dDay);
+
+        dEmotion = diary.getdEmotion();
+        dEmoji = diary.getdEmoji();
+        dContent = diary.getdContent();
+        dPhoto = diary.getdPhoto();
 
         diaryYear.setText(diary.getdYear());
         diaryMonth.setText(diary.getdMonth());
@@ -229,6 +243,10 @@ public class ContentActivity extends Activity {
                 intentEdit.putExtra("dMonth", dMonth);
                 intentEdit.putExtra("dDay", dDay);
                 intentEdit.putExtra("dDate", dDate);
+                intentEdit.putExtra("dEmotion", dEmotion);
+                intentEdit.putExtra("dEmoji", dEmoji);
+                intentEdit.putExtra("dContent", dContent);
+                intentEdit.putExtra("dPhoto", dPhoto);
                 startActivity(intentEdit);
             }
         });
@@ -236,14 +254,37 @@ public class ContentActivity extends Activity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ContentActivity.this);
-                builder.setTitle("삭제");
-                builder.setMessage("정말 삭제?");
-                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                final Dialog dialog = new Dialog(ContentActivity.this);
+                dialog.setContentView(R.layout.dialog_warning);
+                dialog.show();
+
+//                final AlertDialog.Builder builder = new AlertDialog.Builder(ContentActivity.this, R.style.CustomAlertDialog);
+//
+//                ViewGroup viewGroup = findViewById(android.R.id.content);
+//
+//                final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_warning, viewGroup, false);
+//                builder.setView(dialogView);
+//
+//                final AlertDialog alertDialog = builder.create();
+
+
+                final TextView dialogType = (TextView) findViewById(R.id.dialogType);
+                final TextView dialogMessage = (TextView) findViewById(R.id.dialogMessage);
+                final Button btnCancle = (Button) findViewById(R.id.btnCancel);
+                final Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
+
+                dialogType.setText("삭제");
+                dialogMessage.setText("삭제하시면 복구하실 수 없습니다.\n정말로 삭제하시겠습니까?");
+                btnCancle.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+                btnConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
                         DBHelper.dDelete(dYear, dMonth, dDay);
-                        DBHelper.close();
 
                         Intent intentHome = new Intent(ContentActivity.this, MainActivity.class);
                         intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -251,12 +292,32 @@ public class ContentActivity extends Activity {
                         finish();
                     }
                 });
-                builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
+
+
+
+
+//                AlertDialog.Builder builder = new AlertDialog.Builder(ContentActivity.this);
+//                builder.setTitle("삭제");
+//                builder.setMessage("정말 삭제?");
+//                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        DBHelper.dDelete(dYear, dMonth, dDay);
+//                        Log.d(TAG, "onClick: DBHelper.dGetDiary(dYear, dMonth, dDay).getdPhoto()" + DBHelper.dGetDiary(dYear, dMonth, dDay).getdPhoto());
+//
+//                        Intent intentHome = new Intent(ContentActivity.this, MainActivity.class);
+//                        intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                        startActivity(intentHome);
+//                        finish();
+//                    }
+//                });
+//                builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        dialog.dismiss();
+//                    }
+//                });
+//                builder.show();
             }
         });
 
@@ -268,48 +329,46 @@ public class ContentActivity extends Activity {
                 Bitmap bm = diaryContentActivityLayout.getDrawingCache();
 
                 try {
-                    capture(bm);
+                    File image = takeScreenshot(bm);
+                    Log.d(TAG, "onClick: bm: " + bm.toString());
+                    Intent intentShare = new Intent();
+                    intentShare.setAction(Intent.ACTION_SEND);
+                    intentShare.setType("image/jpeg");
+                    intentShare.putExtra(Intent.EXTRA_STREAM, Uri.parse(String.valueOf(image)));
+
+                    try {
+                        startActivity(Intent.createChooser(intentShare, "Share Screenshot"));
+                    } catch (ActivityNotFoundException e) {
+                        Toast.makeText(ContentActivity.this, "No App Available", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
-
-                } finally {
                     bm.recycle();
+                    e.printStackTrace();
                 }
-                Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-
-                intent.setType("image/*");
-
-                intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(diary.getdPhoto()));
-
-                Intent chooser = Intent.createChooser(intent, "친구에게 공유하기");
-                startActivity(chooser);
             }
         });
     }
 
-    private void capture(Bitmap bm) throws Exception {
-        try {
-            String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
-            String imageFileName = "diary_" + timeStamp + "_";
-            Log.d(TAG, "createImageFile: imageFileName: " + imageFileName);
+    private File takeScreenshot(Bitmap bm) throws Exception {
+        String timeStamp = new SimpleDateFormat("HHmmss").format(new Date());
+        String imageFileName = "diary_" + timeStamp + "_" + "screenshot_";
+        Log.d(TAG, "createImageFile: imageFileName: " + imageFileName);
 
-            // 이미지가 저장될 폴더 이름 ( Diary )
-            File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
-                    + File.separator);
-            if (!storageDir.exists()) storageDir.mkdirs();
-            Log.d(TAG, "createImageFile: storageDir: " + storageDir);
+        // 이미지가 저장될 폴더 이름 ( Diary )
+        File storageDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                + File.separator + "/Diary/");
+        if (!storageDir.exists()) storageDir.mkdirs();
+        Log.d(TAG, "createImageFile: storageDir: " + storageDir);
 
-            // 파일 생성
-            File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-            Log.d(TAG, "createImageFile : " + image.getAbsolutePath());
+        // 파일 생성
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        Log.d(TAG, "createImageFile : " + image.getAbsolutePath());
 
-            bm.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            sendBroadcast(new Intent(Intent.ACTION_MEDIA_MOUNTED, Uri.parse("file://" + Environment.getExternalStorageDirectory())));
-        } catch (Exception e) {
+        // 파일 압축
+        FileOutputStream fos;
+        fos = new FileOutputStream(image);
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, fos);
 
-        } finally {
-            if(out != null) {
-                out.close();
-            }
-        }
+        return image;
     }
 }
