@@ -5,7 +5,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.database.CursorWindow;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +14,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout diarySetDate;
     private FloatingActionButton btnAdd;
     private Button btnSetting, btnChart, btnAsc, btnDesc;
-    private com.yerin.diary.DatePickerDialog datePickerDialog;
+    private YearMonthDatePickerDialog yearMonthDatePickerDialog;
 
     private DiaryAdapter dAdapter;
     private ArrayList<Diary> dList;
@@ -132,16 +130,17 @@ public class MainActivity extends AppCompatActivity {
         diarySetDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                calendar = Calendar.getInstance();
 
-                int currentYear = calendar.get(Calendar.YEAR);
-                int currentMonth = calendar.get(Calendar.MONTH);
-                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                YearMonthDatePickerDialog yearMonthDatePickerDialog = new YearMonthDatePickerDialog();
+                yearMonthDatePickerDialog.setListener(datePickerListener);
+                yearMonthDatePickerDialog.show(getSupportFragmentManager(), "date picker");
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog();
-                datePickerDialog.setListener(datePickerListener);
-                datePickerDialog.show(getSupportFragmentManager(), "date picker test");
-
+//                calendar = Calendar.getInstance();
+//
+//                int currentYear = calendar.get(Calendar.YEAR);
+//                int currentMonth = calendar.get(Calendar.MONTH);
+//                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+//
 //                DatePickerDialog.OnDateSetListener dDateSetListener =
 //                        new DatePickerDialog.OnDateSetListener() {
 //                            public void onDateSet(DatePicker view, int year, int monthOfYear, final int dayOfMonth) {
@@ -203,8 +202,14 @@ public class MainActivity extends AppCompatActivity {
         btnDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
-//                ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(dList.size(), 0);
+//                recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
+                ((LinearLayoutManager) recyclerView.getLayoutManager()).scrollToPositionWithOffset(0, 0);
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        recyclerView.scrollToPosition(dAdapter.getItemCount());
+//                    }
+//                }, 200);
             }
         });
     }

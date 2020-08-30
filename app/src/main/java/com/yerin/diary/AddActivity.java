@@ -1,17 +1,19 @@
 package com.yerin.diary;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -29,6 +31,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
+
+import android.app.Fragment;
 
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
@@ -151,44 +157,48 @@ public class AddActivity extends Activity {
                 int currentMonth = calendar.get(Calendar.MONTH);
                 int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog.OnDateSetListener dDateSetListener =
-                        new DatePickerDialog.OnDateSetListener() {
-                            // onDateSet method
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                diaryYear.setText((year) + "");
-                                if (monthOfYear < 10) {
-                                    diaryMonth.setText("0" + (monthOfYear + 1) + "");
-                                } else {
-                                    diaryMonth.setText((monthOfYear + 1) + "");
-                                }
-                                if (dayOfMonth < 10) {
-                                    diaryDay.setText("0" + (dayOfMonth) + "");
-                                } else {
-                                    diaryDay.setText((dayOfMonth) + "");
-                                }
+//                DatePickerDialog datePickerDialog = new DatePickerDialog();
+//                datePickerDialog.setListener(datePickerListener);
+//                DatePickerDialog.show(getSupportFragmentManager(), "date picker");
 
-                                // 위의 날짜에 해당하는 요일
-                                String day = diaryYear.getText().toString() + diaryMonth.getText().toString() + diaryDay.getText().toString();
-                                String[] week = {"일", "월", "화", "수", "목", "금", "토"};
-                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-
-                                Calendar cal = Calendar.getInstance();
-                                Date getDate;
-                                try {
-                                    getDate = dateFormat.parse(day);
-                                    cal.setTime(getDate);
-                                    int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-                                    diaryDate.setText(week[w] + "");
-                                } catch (ParseException e) {
-                                    e.printStackTrace();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-                        };
-                DatePickerDialog dialog = new DatePickerDialog(AddActivity.this, dDateSetListener, currentYear, currentMonth, currentDay);
-                dialog.show();
+//                DatePickerDialog.OnDateSetListener dDateSetListener =
+//                        new DatePickerDialog.OnDateSetListener() {
+//                            // onDateSet method
+//                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+//                                diaryYear.setText((year) + "");
+//                                if (monthOfYear < 10) {
+//                                    diaryMonth.setText("0" + (monthOfYear + 1) + "");
+//                                } else {
+//                                    diaryMonth.setText((monthOfYear + 1) + "");
+//                                }
+//                                if (dayOfMonth < 10) {
+//                                    diaryDay.setText("0" + (dayOfMonth) + "");
+//                                } else {
+//                                    diaryDay.setText((dayOfMonth) + "");
+//                                }
+//
+//                                // 위의 날짜에 해당하는 요일
+//                                String day = diaryYear.getText().toString() + diaryMonth.getText().toString() + diaryDay.getText().toString();
+//                                String[] week = {"일", "월", "화", "수", "목", "금", "토"};
+//                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+//
+//                                Calendar cal = Calendar.getInstance();
+//                                Date getDate;
+//                                try {
+//                                    getDate = dateFormat.parse(day);
+//                                    cal.setTime(getDate);
+//                                    int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+//                                    diaryDate.setText(week[w] + "");
+//                                } catch (ParseException e) {
+//                                    e.printStackTrace();
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//
+//                            }
+//                        };
+//                DatePickerDialog dialog = new DatePickerDialog(AddActivity.this, dDateSetListener, currentYear, currentMonth, currentDay);
+//                dialog.show();
             }
         });
 
@@ -293,8 +303,8 @@ public class AddActivity extends Activity {
                 ViewGroup viewGroup = findViewById(android.R.id.content);
 
                 final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_emoji, viewGroup, false);
-                dialogView.setMinimumWidth((int) (displayRectangle.width() * 1f - 50));
-                dialogView.setMinimumHeight((int) (displayRectangle.height() * 1f - 50));
+                dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.8f));
 
                 builder.setView(dialogView);
 
@@ -528,6 +538,18 @@ public class AddActivity extends Activity {
 //        }
 //    }
 
+    android.app.DatePickerDialog.OnDateSetListener datePickerListener = new android.app.DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+            Log.d("YearMonthPickerTest", "year = " + year + ", month = " + monthOfYear + ", day = " + dayOfMonth);
+
+            diaryYear.setText((year) + "");
+            if ((monthOfYear + 1) < 10)
+                diaryMonth.setText("0" + (monthOfYear + 1) + "");
+            else diaryMonth.setText((dayOfMonth + 1) + "");
+        }
+    };
+
     public static class ObjectUtils {
         public static boolean isEmpty(Object s) {
             if (s == null) {
@@ -590,6 +612,7 @@ public class AddActivity extends Activity {
 //        }
 //    }
 
+    @SuppressLint("MissingSuperCall")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {

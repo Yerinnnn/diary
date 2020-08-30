@@ -376,8 +376,8 @@ public class EditActivity extends Activity {
 
                 ViewGroup viewGroup = findViewById(android.R.id.content);
                 final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_emoji, viewGroup, false);
-                dialogView.setMinimumWidth((int) (displayRectangle.width() * 1f - 50));
-                dialogView.setMinimumHeight((int) (displayRectangle.height() * 1f - 50));
+                dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
+                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.8f));
 
                 builder.setView(dialogView);
 
