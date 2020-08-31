@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
         db = DBHelper.getWritableDatabase();
 
         dAdapter = new DiaryAdapter(dList);
-        dAdapter.setdContext(MainActivity.this);
+        dAdapter.setdContext(getApplicationContext());
         recyclerView.setAdapter(dAdapter);
 
         new Handler().postDelayed(new Runnable() {
@@ -127,48 +127,6 @@ public class MainActivity extends AppCompatActivity {
         }, 200);
 
         // 요소별 동작 메소드
-        diarySetDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                YearMonthDatePickerDialog yearMonthDatePickerDialog = new YearMonthDatePickerDialog();
-                yearMonthDatePickerDialog.setListener(datePickerListener);
-                yearMonthDatePickerDialog.show(getSupportFragmentManager(), "date picker");
-
-//                calendar = Calendar.getInstance();
-//
-//                int currentYear = calendar.get(Calendar.YEAR);
-//                int currentMonth = calendar.get(Calendar.MONTH);
-//                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-//
-//                DatePickerDialog.OnDateSetListener dDateSetListener =
-//                        new DatePickerDialog.OnDateSetListener() {
-//                            public void onDateSet(DatePicker view, int year, int monthOfYear, final int dayOfMonth) {
-//                                diaryYear.setText((year) + "");
-//                                if ((monthOfYear + 1) < 10)
-//                                    diaryMonth.setText("0" + (monthOfYear + 1) + "");
-//                                else diaryMonth.setText((dayOfMonth + 1) + "");
-//
-//                                dList = DBHelper.dGetDiaryList(diaryYear.getText().toString(), diaryMonth.getText().toString());
-//
-//                                dAdapter = new DiaryAdapter(dList);
-//                                recyclerView.setAdapter(dAdapter);
-//
-////                                new Handler().postDelayed(new Runnable() {
-////                                    @Override
-////                                    public void run() {
-////                                        recyclerView.scrollToPosition();
-////                                    }
-////                                }, 200);
-//                            }
-//                        };
-//                DatePickerDialog dialog = new DatePickerDialog(MainActivity.this, dDateSetListener, currentYear, currentMonth, currentDay);
-//                dialog.show();
-
-            }
-        });
-
-
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,15 +172,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void diarySetDateListener(View v) {
+        YearMonthDatePickerDialog yearMonthDatePickerDialog = new YearMonthDatePickerDialog();
+        yearMonthDatePickerDialog.setListener(datePickerListener);
+        yearMonthDatePickerDialog.show(getSupportFragmentManager(), "date picker");
+    }
+
     android.app.DatePickerDialog.OnDateSetListener datePickerListener = new android.app.DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             Log.d("YearMonthPickerTest", "year = " + year + ", month = " + monthOfYear + ", day = " + dayOfMonth);
 
             diaryYear.setText((year) + "");
-            if ((monthOfYear + 1) < 10)
-                diaryMonth.setText("0" + (monthOfYear + 1) + "");
-            else diaryMonth.setText((dayOfMonth + 1) + "");
+
+            if ((monthOfYear) < 10)
+                diaryMonth.setText("0" + (monthOfYear));
+            else diaryMonth.setText((dayOfMonth) + "");
 
             dList = DBHelper.dGetDiaryList(diaryYear.getText().toString(), diaryMonth.getText().toString());
 

@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -78,7 +79,7 @@ public class ContentActivity extends Activity {
         dMonth = intent.getStringExtra("dMonth");
         dDay = intent.getStringExtra("dDay");
         dDate = intent.getStringExtra("dDate");
-        Log.d(TAG, "ContentActivity onCreate: getStringExtra dYear: " + dYear + dMonth + dDay);
+        Log.d(TAG, "ContentActivity onCreate: getStringExtra dYear: " + dYear + dMonth + dDay + dDate);
 
 //        Log.d(TAG, "onCreate: DBHelper.dGetDiary" + DBHelper.dGetDiary("2020", "08", "16"));
 
@@ -90,13 +91,15 @@ public class ContentActivity extends Activity {
         dContent = diary.getdContent();
         dPhoto = diary.getdPhoto();
 
-        diaryYear.setText(diary.getdYear());
-        diaryMonth.setText(diary.getdMonth());
-        diaryDay.setText(diary.getdDay());
-        diaryDate.setText(diary.getdDate());
+        // xml 요소에 데이터 setting
+        diaryYear.setText(dYear);
+        diaryMonth.setText(dMonth);
+        diaryDay.setText(dDay);
+        diaryDate.setText(dDate);
+        diaryEmotion.setText(dEmotion);
 
         // 감정에 따라 글씨 색 변경
-        switch (diary.getdEmotion()) {
+        switch (dEmotion) {
             case "좋아":
                 diaryEmotion.setTextColor(Color.parseColor("#FFC107"));
                 break;
@@ -254,70 +257,8 @@ public class ContentActivity extends Activity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final Dialog dialog = new Dialog(ContentActivity.this);
-                dialog.setContentView(R.layout.dialog_warning);
-                dialog.show();
-
-//                final AlertDialog.Builder builder = new AlertDialog.Builder(ContentActivity.this, R.style.CustomAlertDialog);
-//
-//                ViewGroup viewGroup = findViewById(android.R.id.content);
-//
-//                final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_warning, viewGroup, false);
-//                builder.setView(dialogView);
-//
-//                final AlertDialog alertDialog = builder.create();
-
-
-                final TextView dialogType = (TextView) findViewById(R.id.dialogType);
-                final TextView dialogMessage = (TextView) findViewById(R.id.dialogMessage);
-                final Button btnCancle = (Button) findViewById(R.id.btnCancel);
-                final Button btnConfirm = (Button) findViewById(R.id.btnConfirm);
-
-                dialogType.setText("삭제");
-                dialogMessage.setText("삭제하시면 복구하실 수 없습니다.\n정말로 삭제하시겠습니까?");
-                btnCancle.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-                btnConfirm.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        DBHelper.dDelete(dYear, dMonth, dDay);
-
-                        Intent intentHome = new Intent(ContentActivity.this, MainActivity.class);
-                        intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intentHome);
-                        finish();
-                    }
-                });
-
-
-
-
-//                AlertDialog.Builder builder = new AlertDialog.Builder(ContentActivity.this);
-//                builder.setTitle("삭제");
-//                builder.setMessage("정말 삭제?");
-//                builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        DBHelper.dDelete(dYear, dMonth, dDay);
-//                        Log.d(TAG, "onClick: DBHelper.dGetDiary(dYear, dMonth, dDay).getdPhoto()" + DBHelper.dGetDiary(dYear, dMonth, dDay).getdPhoto());
-//
-//                        Intent intentHome = new Intent(ContentActivity.this, MainActivity.class);
-//                        intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                        startActivity(intentHome);
-//                        finish();
-//                    }
-//                });
-//                builder.setNegativeButton("아니요", new DialogInterface.OnClickListener() {
-//                    @Override
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                builder.show();
+                DeleteDialog deleteDialog = new DeleteDialog(ContentActivity.this, dYear, dMonth, dDay);
+                deleteDialog.show();
             }
         });
 

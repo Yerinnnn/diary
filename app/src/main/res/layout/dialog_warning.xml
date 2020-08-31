@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="250dp"
-    android:layout_margin="20dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
     android:background="@color/backgroundYellow"
     android:orientation="vertical">
 
@@ -18,6 +19,7 @@
         android:text="삭제"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/barunhippie"
+        android:textColor="#F44336"
         android:textSize="25sp"
         android:layout_height="wrap_content"></TextView>
 
@@ -26,7 +28,7 @@
         android:layout_width="match_parent"
         android:text="삭제하시면 복구하실 수 없습니다.\n정말로 삭제하시겠습니까?"
         android:fontFamily="@font/barunhippie"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:layout_height="wrap_content"></TextView>
 
     </LinearLayout>

@@ -56,14 +56,15 @@ public class YearMonthDatePickerDialog extends DialogFragment {
             }
         });
 
-        monthPicker.setMinValue(1);
-        monthPicker.setMaxValue(12);
-        monthPicker.setValue(cal.get(Calendar.MONTH) + 1);
-
         int year = cal.get(Calendar.YEAR);
         yearPicker.setMinValue(MIN_YEAR);
         yearPicker.setMaxValue(MAX_YEAR);
         yearPicker.setValue(year);
+
+        int month = cal.get(Calendar.MONTH) + 1;
+        monthPicker.setMinValue(1);
+        monthPicker.setMaxValue(12);
+        monthPicker.setValue(month);
 
         builder.setView(dialog);
 

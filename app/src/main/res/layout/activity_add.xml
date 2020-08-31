@@ -13,21 +13,32 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp"
         android:layout_marginRight="10dp"
-        android:gravity="center"
         android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/btnBack"
-            android:layout_width="26dp"
-            android:layout_height="28dp"
-            android:layout_marginRight="300dp"
-            android:background="@drawable/ic_close_black_24dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="left">
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="26dp"
+                android:layout_height="28dp"
+                android:background="@drawable/ic_close_black_24dp" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="26dp"
-            android:layout_height="28dp"
-            android:background="@drawable/ic_done_black_24dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right">
+            <Button
+                android:id="@+id/btnSave"
+                android:layout_width="26dp"
+                android:layout_height="28dp"
+                android:background="@drawable/ic_done_black_24dp" />
+
+        </LinearLayout>
     </LinearLayout>
 
     <ScrollView
@@ -61,17 +72,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
-                        android:textSize="18sp"
                         android:text="2020"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="년 "
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/diaryMonth"
@@ -79,16 +90,16 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="5"
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="월 "
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/diaryDay"
@@ -96,24 +107,24 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="24"
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="일 "
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="("
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/diaryDate"
@@ -121,16 +132,16 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="일"
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text=")"
-                        android:textSize="18sp"
-                        android:textColor="@color/textPrimary" />
+                        android:textColor="@color/textPrimary"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout

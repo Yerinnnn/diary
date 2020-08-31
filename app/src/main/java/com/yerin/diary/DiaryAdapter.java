@@ -96,7 +96,7 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
                             intent.putExtra("dDay", dDay);
                             intent.putExtra("dDate", dDate);
 
-                            dContext.startActivity(intent);
+                            dContext.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                     }
                 }
 

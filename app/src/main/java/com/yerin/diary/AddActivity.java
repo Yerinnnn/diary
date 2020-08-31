@@ -17,6 +17,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.view.View;
@@ -154,8 +155,12 @@ public class AddActivity extends Activity {
                 calendar = Calendar.getInstance();
 
                 int currentYear = calendar.get(Calendar.YEAR);
-                int currentMonth = calendar.get(Calendar.MONTH);
+                int currentMonth = calendar.get(Calendar.MONTH + 1);
                 int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddActivity.this, currentYear, currentMonth, currentDay);
+                datePickerDialog.setListener(datePickerListener);
+                datePickerDialog.show();
 
 //                DatePickerDialog datePickerDialog = new DatePickerDialog();
 //                datePickerDialog.setListener(datePickerListener);
@@ -303,8 +308,8 @@ public class AddActivity extends Activity {
                 ViewGroup viewGroup = findViewById(android.R.id.content);
 
                 final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_emoji, viewGroup, false);
-                dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.8f));
-                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.8f));
+                dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.7f));
+                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
 
                 builder.setView(dialogView);
 
@@ -544,9 +549,31 @@ public class AddActivity extends Activity {
             Log.d("YearMonthPickerTest", "year = " + year + ", month = " + monthOfYear + ", day = " + dayOfMonth);
 
             diaryYear.setText((year) + "");
+
             if ((monthOfYear + 1) < 10)
-                diaryMonth.setText("0" + (monthOfYear + 1) + "");
-            else diaryMonth.setText((dayOfMonth + 1) + "");
+                diaryMonth.setText("0" + (monthOfYear) + "");
+            else diaryMonth.setText((dayOfMonth) + "");
+
+            if ((dayOfMonth) < 10)
+                diaryDay.setText("0" + (dayOfMonth));
+            else diaryDay.setText((dayOfMonth) + "");
+
+            // 위의 날짜에 해당하는 요일
+            String day = String.valueOf(year) + String.valueOf(monthOfYear) + String.valueOf(dayOfMonth);
+            String[] week = {"일", "월", "화", "수", "목", "금", "토"};
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMd");
+            Calendar cal = Calendar.getInstance();
+            Date getDate;
+            try {
+                getDate = dateFormat.parse(day);
+                cal.setTime(getDate);
+                int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+                diaryDate.setText(week[w] + "");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     };
 
@@ -579,38 +606,6 @@ public class AddActivity extends Activity {
         intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
         startActivityForResult(intent, PICK_FROM_ALBUM);
     }
-
-
-//    // 카메라에서 이미지 가져오기
-//    private void takePhoto() {
-//        isCamera = true;
-//
-//        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//
-//        try {
-//            tempFile = createImageFile();
-//        } catch (IOException e) {
-//            Toast.makeText(this, "이미지 처리 오류! 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
-//            finish();
-//            e.printStackTrace();
-//        }
-//        if (tempFile != null) {
-//
-//            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-//
-//                Uri photoUri = FileProvider.getUriForFile(this,
-//                        "book.provider", tempFile);
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-//                startActivityForResult(intent, PICK_FROM_CAMERA);
-//
-//            } else {
-//
-//                Uri photoUri = Uri.fromFile(tempFile);
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-//                startActivityForResult(intent, PICK_FROM_CAMERA);
-//            }
-//        }
-//    }
 
     @SuppressLint("MissingSuperCall")
     @Override

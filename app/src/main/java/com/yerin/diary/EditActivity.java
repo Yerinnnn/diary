@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -286,12 +287,18 @@ public class EditActivity extends Activity {
         diaryContent.setText(dContent);
 
         // 디비 데이터를 이용해 사진 셋팅
-        try {
-            diaryPhoto.setImageURI(Uri.parse(diary.getdPhoto()));
-        } catch (Exception e) {
-            diaryPhoto.setVisibility(GONE);
+
+        if (dPhoto == null) {
+            diaryPhoto.setImageResource(R.drawable.add_ubu);
+        } else {
+            try {
+                diaryPhoto.setImageURI(Uri.parse(diary.getdPhoto()));
+            } catch (Exception e) {
+                diaryPhoto.setVisibility(GONE);
 //            holder.dPhotoWarning.setVisibility(View.VISIBLE);
+            }
         }
+
 
         // 기능
        emotionRadioGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -511,11 +518,11 @@ public class EditActivity extends Activity {
         diaryPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tedPermission();
+                    tedPermission();
 
-                if (isPermission) goToAlbum();
-                else
-                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.permission_2), Toast.LENGTH_LONG).show();
+                    if (isPermission) goToAlbum();
+                    else
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.permission_2), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -582,7 +589,9 @@ public class EditActivity extends Activity {
                     dContent = "";
                 }
 
-                if (dPhoto != diary.getdPhoto()) {
+                Log.d(TAG, "onClick: dPhoto = savingUri.toString(); " + savingUri);
+
+                if (savingUri.toString() != dPhoto) {
                     try {
                         dPhoto = savingUri.toString();
                     } catch (Exception e) {
