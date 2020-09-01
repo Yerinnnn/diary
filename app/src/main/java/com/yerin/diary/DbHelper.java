@@ -191,5 +191,43 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         return list;
     }
+
+    public ArrayList<Diary> dGetDiaryListAll() {
+        String dYear = null;
+        String dMonth = null;
+        String dDay = null;
+        String dDate = null;
+        String dEmotion = null;
+        int dEmoji;
+        String dContent = null;
+        String dPhoto = null;
+        ArrayList<Diary> list = new ArrayList<>();
+
+        SQLiteDatabase db = getReadableDatabase();
+
+        Cursor cursor = db.rawQuery("SELECT * FROM diary ORDER BY dMonth DESC, dDay DESC;", null);
+
+        while (cursor.moveToNext()) {
+            dYear = cursor.getString(1);
+            dMonth = cursor.getString(2);
+            dDay = cursor.getString(3);
+            dDate = cursor.getString(4);
+            dEmotion = cursor.getString(5);
+            dEmoji = cursor.getInt(6);
+            dContent = cursor.getString(7);
+//            dPhoto = cursor.getString(8);
+
+            if (dPhoto != null) {
+                dPhoto = cursor.getString(8);
+            } else if (dPhoto == null) {
+                dPhoto = null;
+            }
+//
+            // 모든 데이터 객체에 저장
+            Diary results = new Diary(dYear, dMonth, dDay, dDate, dEmotion, dEmoji, dContent, dPhoto);
+            list.add(results);
+        }
+        return list;
+    }
 }
 

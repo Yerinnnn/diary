@@ -257,8 +257,47 @@ public class ContentActivity extends Activity {
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DeleteDialog deleteDialog = new DeleteDialog(ContentActivity.this, dYear, dMonth, dDay);
-                deleteDialog.show();
+//                DeleteDialog deleteDialog = new DeleteDialog(ContentActivity.this, dYear, dMonth, dDay);
+//                deleteDialog.show();
+
+                final Dialog dialog = new Dialog(ContentActivity.this);
+
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_warning);
+
+                WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+                params.width = WindowManager.LayoutParams.MATCH_PARENT;
+                params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                dialog.getWindow().setAttributes(params);
+
+                dialog.show();
+
+                final TextView dialogType = (TextView) dialog.findViewById(R.id.dialogType);
+                final TextView dialogMessage = (TextView) dialog.findViewById(R.id.dialogMessage);
+                final Button btnCancle = (Button) dialog.findViewById(R.id.btnCancel);
+                final Button btnConfirm = (Button) dialog.findViewById(R.id.btnConfirm);
+
+                dialogType.setText("삭제");
+                dialogMessage.setText("삭제 후에는 복구가 불가능합니다.\n정말 삭제 하시겠습니까?");
+                btnConfirm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        DbHelper DBHelper = new DbHelper(ContentActivity.this, "diary", null, 1);
+                        DBHelper.dDelete(dYear, dMonth, dDay);
+
+                        Intent intentHome = new Intent(ContentActivity.this, MainActivity.class);
+                        intentHome.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        ContentActivity.this.startActivity(intentHome);
+                    }
+                });
+                btnCancle.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
             }
         });
 

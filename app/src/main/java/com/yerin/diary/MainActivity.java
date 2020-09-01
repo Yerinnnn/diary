@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DBHelper = new DbHelper(getApplicationContext(), "diary", null, 1);
+        DBHelper = new DbHelper(MainActivity.this, "diary", null, 1);
 
         // 요소 연결
         firstMessage = findViewById(R.id.firstMessage);
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         if (Integer.parseInt(currentMonth) < 10) diaryMonth.setText("0" + currentMonth);
         else diaryMonth.setText(currentMonth);
 
-        dList = DBHelper.dGetDiaryList(diaryYear.getText().toString(), diaryMonth.getText().toString());
+        dList = DBHelper.dGetDiaryListAll();
 
         // 데이터가 존재하지 않을 경우 first message 출력
         if (dList.size() != 0) {
@@ -109,15 +109,13 @@ public class MainActivity extends AppCompatActivity {
 
         // 리사이클러뷰 탑재
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setNestedScrollingEnabled(false);
 
-        DBHelper = new DbHelper(getApplicationContext(), "diary", null, 1);
-        db = DBHelper.getWritableDatabase();
-
         dAdapter = new DiaryAdapter(dList);
-        dAdapter.setdContext(getApplicationContext());
+        dAdapter.setdContext(MainActivity.this);
         recyclerView.setAdapter(dAdapter);
+//        recyclerView.scrollToPosition();
 
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -130,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), AddActivity.class);
+                Intent intent = new Intent(MainActivity.this, AddActivity.class);
                 startActivity(intent);
             }
         });

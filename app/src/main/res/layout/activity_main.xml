@@ -135,7 +135,7 @@
                 android:layout_marginTop="60sp"
                 android:fontFamily="@font/barunhippie"
                 android:lineSpacingExtra="8dp"
-                android:text="아직 작성된 일기가 없습니다.\n오늘 하루의 이야기를 남겨보세요 :)"
+                android:text="이번 달에 작성된 일기가 없습니다.\n오늘 하루의 이야기를 남겨보세요 :)"
                 android:textColor="@color/textPrimary"
                 android:textSize="20sp"
                 app:scale_height="200"

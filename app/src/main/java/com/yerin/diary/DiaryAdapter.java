@@ -33,6 +33,10 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
         this.dContext = context;
     }
 
+    DiaryAdapter(ArrayList<Diary> list) {
+        dList = list;
+    }
+
     public class DiaryViewHolder extends RecyclerView.ViewHolder {
         TextView diaryYear;
         TextView diaryMonth;
@@ -61,26 +65,6 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-
-                    // 아이템 클릭 시 사진 보여줌
-//                    if (position != RecyclerView.NO_POSITION) {
-//                        try {
-//                            dPhoto.setVisibility(View.VISIBLE);
-//
-//                            itemView.setOnClickListener(new View.OnClickListener() {
-//                                @Override
-//                                public void onClick(View v) {
-//                                    int position = getAdapterPosition();
-//                                    if (position != RecyclerView.NO_POSITION) {
-//                                        dPhoto.setVisibility(GONE);
-//                                        dPhotoWarning.setVisibility(GONE);
-//                                    }
-//                                }
-//                            });
-//                        } catch (Exception e) {
-//
-//                        }
-//                    }
 
                     // 아이템 클릭 시 ContentActivity로 이동
                     if (position != RecyclerView.NO_POSITION) {
@@ -131,10 +115,6 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
         }
     }
 
-    DiaryAdapter(ArrayList<Diary> list) {
-        dList = list;
-    }
-
     @Override
     public DiaryAdapter.DiaryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         Context context = parent.getContext();
@@ -147,23 +127,8 @@ public class DiaryAdapter extends RecyclerView.Adapter<DiaryAdapter.DiaryViewHol
         return vh;
     }
 
-    public Bitmap getDiaryPhoto(byte[] photoByte) {
-        Log.d(TAG, "getDiaryPhoto: 65 line photoByte: " + photoByte);
-        byte[] list = photoByte;
-        Bitmap bitmap = BitmapFactory.decodeByteArray(list, 0, list.length);
-
-        if (list == null) {
-            bitmap = null;
-        } else {
-            bitmap = BitmapFactory.decodeByteArray(list, 0, list.length);
-        }
-        return bitmap;
-    }
-
     @Override
     public void onBindViewHolder(@NonNull DiaryAdapter.DiaryViewHolder holder, int position) {
-        dList.get(position).getdYear();
-
         holder.diaryYear.setText(dList.get(position).getdYear());
         holder.diaryMonth.setText((dList.get(position).getdMonth()) + "");
         holder.diaryDay.setText((dList.get(position).getdDay()) + "");

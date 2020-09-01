@@ -4,8 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
@@ -26,6 +28,7 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -33,6 +36,7 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import android.app.Fragment;
@@ -158,52 +162,66 @@ public class AddActivity extends Activity {
                 int currentMonth = calendar.get(Calendar.MONTH + 1);
                 int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddActivity.this, currentYear, currentMonth, currentDay);
-                datePickerDialog.setListener(datePickerListener);
-                datePickerDialog.show();
-
-//                DatePickerDialog datePickerDialog = new DatePickerDialog();
+//                DatePickerDialog datePickerDialog = new DatePickerDialog(AddActivity.this, currentYear, currentMonth, currentDay);
 //                datePickerDialog.setListener(datePickerListener);
-//                DatePickerDialog.show(getSupportFragmentManager(), "date picker");
+//                datePickerDialog.show();
 
-//                DatePickerDialog.OnDateSetListener dDateSetListener =
-//                        new DatePickerDialog.OnDateSetListener() {
-//                            // onDateSet method
-//                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-//                                diaryYear.setText((year) + "");
-//                                if (monthOfYear < 10) {
-//                                    diaryMonth.setText("0" + (monthOfYear + 1) + "");
-//                                } else {
-//                                    diaryMonth.setText((monthOfYear + 1) + "");
-//                                }
-//                                if (dayOfMonth < 10) {
-//                                    diaryDay.setText("0" + (dayOfMonth) + "");
-//                                } else {
-//                                    diaryDay.setText((dayOfMonth) + "");
-//                                }
-//
-//                                // 위의 날짜에 해당하는 요일
-//                                String day = diaryYear.getText().toString() + diaryMonth.getText().toString() + diaryDay.getText().toString();
-//                                String[] week = {"일", "월", "화", "수", "목", "금", "토"};
-//                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
-//
-//                                Calendar cal = Calendar.getInstance();
-//                                Date getDate;
-//                                try {
-//                                    getDate = dateFormat.parse(day);
-//                                    cal.setTime(getDate);
-//                                    int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
-//                                    diaryDate.setText(week[w] + "");
-//                                } catch (ParseException e) {
-//                                    e.printStackTrace();
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-//
-//                            }
-//                        };
-//                DatePickerDialog dialog = new DatePickerDialog(AddActivity.this, dDateSetListener, currentYear, currentMonth, currentDay);
-//                dialog.show();
+                final Dialog dialog = new Dialog(AddActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_datepicker);
+
+                WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+                params.width = WindowManager.LayoutParams.MATCH_PARENT;
+                params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+                dialog.getWindow().setAttributes(params);
+
+                dialog.show();
+
+                final Button btnConfirm = dialog.findViewById(R.id.btnConfirm);
+                final Button btnCancel = dialog.findViewById(R.id.btnCancel);
+
+                final NumberPicker yearPicker = dialog.findViewById(R.id.pickerYear);
+                final NumberPicker monthPicker = dialog.findViewById(R.id.pickerMonth);
+                final NumberPicker dayPicker = dialog.findViewById(R.id.pickerDay);
+
+                final Calendar cal = Calendar.getInstance();
+
+                final int MAX_YEAR = 2099;
+                final int MIN_YEAR = 1980;
+
+//                int year = cal.get(Calendar.YEAR);
+                yearPicker.setMinValue(MIN_YEAR);
+                yearPicker.setMaxValue(MAX_YEAR);
+                yearPicker.setValue(currentYear);
+
+//                int month = cal.get(Calendar.MONTH) + 1;
+                monthPicker.setMinValue(1);
+                monthPicker.setMaxValue(12);
+                monthPicker.setValue(currentMonth);
+                Log.d(TAG, "onCreate: currentMonth: " + currentMonth);
+
+//                int day = cal.get(Calendar.DAY_OF_MONTH);
+                dayPicker.setMinValue(1);
+                dayPicker.setMaxValue(31);
+                monthPicker.setValue(currentDay);
+                Log.d(TAG, "onCreate: currentDay: " + currentDay);
+
+                btnCancel.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        dialog.dismiss();
+                    }
+                });
+
+                btnConfirm.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        datePickerListener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue(), dayPicker.getValue());
+                        dialog.dismiss();
+                    }
+                });
+
             }
         });
 
@@ -215,24 +233,17 @@ public class AddActivity extends Activity {
                     isEmotionChecking = false;
                     emotionRadioGroup2.clearCheck();
                     emotionCheckedId = checkedId;
-
-//                    if (emotionCheckedId == R.id.btn_smile) {
-//                        btnSmile.setTextSize(23);
-//                    } else if (emotionCheckedId == R.id.btn_soso) {
-//                        btnSoso.setTextSize(23);
-//                    } else if (emotionCheckedId == R.id.btn_angry) {
-//                        btnAngry.setTextSize(23);
-//                    }
                 }
                 isEmotionChecking = true;
 
                 if (emotionCheckedId == R.id.btn_smile) {
-                    btnSmile.setTextSize(23);
-                    btnSoso.setTextSize(18);
-                    btnAngry.setTextSize(18);
-                    btnHappy.setTextSize(18);
-                    btnRelax.setTextSize(18);
-                    btnSad.setTextSize(18);
+//                    btnSmile.setTextSize(23);
+//                    btnSoso.setTextSize(18);
+//                    btnAngry.setTextSize(18);
+//                    btnHappy.setTextSize(18);
+//                    btnRelax.setTextSize(18);
+//                    btnSad.setTextSize(18);
+                    btnSmile.setTextColor(Color.parseColor("#000000"));
                 } else if (emotionCheckedId == R.id.btn_soso) {
                     btnSmile.setTextSize(18);
                     btnSoso.setTextSize(23);
@@ -259,13 +270,6 @@ public class AddActivity extends Activity {
                     emotionRadioGroup1.clearCheck();
                     emotionCheckedId = checkedId;
 
-//                    if (emotionCheckedId == R.id.btn_happy) {
-//                        btnHappy.setTextSize(23);
-//                    } else if (emotionCheckedId == R.id.btn_relax) {
-//                        btnRelax.setTextSize(23);
-//                    } else if (emotionCheckedId == R.id.btn_sad) {
-//                        btnSad.setTextSize(23);
-//                    }
                 }
                 isEmotionChecking = true;
 
@@ -298,28 +302,23 @@ public class AddActivity extends Activity {
         diaryEmoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Rect displayRectangle = new Rect();
+                final Dialog dialog = new Dialog(AddActivity.this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.dialog_emoji);
 
-                Window window = AddActivity.this.getWindow();
-                window.getDecorView().getWindowVisibleDisplayFrame(displayRectangle);
+                WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+                params.width = WindowManager.LayoutParams.MATCH_PARENT;
+                params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(AddActivity.this, R.style.CustomAlertDialog);
+                dialog.getWindow().setAttributes(params);
 
-                ViewGroup viewGroup = findViewById(android.R.id.content);
+                dialog.show();
 
-                final View dialogView = LayoutInflater.from(v.getContext()).inflate(R.layout.dialog_emoji, viewGroup, false);
-                dialogView.setMinimumWidth((int) (displayRectangle.width() * 0.7f));
-                dialogView.setMinimumHeight((int) (displayRectangle.height() * 0.7f));
-
-                builder.setView(dialogView);
-
-                final AlertDialog alertDialog = builder.create();
-
-                final ImageView bigEmoji = dialogView.findViewById(R.id.bigEmoji);
-                Button btnOk = dialogView.findViewById(R.id.btnOk);
-                final GridView emojiGridView = dialogView.findViewById(R.id.diaryEmojiGridView);
-
+                final ImageView bigEmoji = dialog.findViewById(R.id.bigEmoji);
+                final Button btnOk = dialog.findViewById(R.id.btnOk);
+                final GridView emojiGridView = dialog.findViewById(R.id.diaryEmojiGridView);
                 final EmojiGridViewAdapter emojiGridViewAdapter = new EmojiGridViewAdapter(AddActivity.this, R.layout.row);
+
                 emojiGridView.setAdapter(emojiGridViewAdapter);
 
                 emojiGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -369,20 +368,15 @@ public class AddActivity extends Activity {
                 btnOk.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        alertDialog.dismiss();
+                        dialog.dismiss();
                     }
                 });
-                alertDialog.show();
             }
         });
 
         diaryPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(intent, REQUEST_CODE);
                 tedPermission();
 
                 if (isPermission) goToAlbum();
@@ -507,42 +501,6 @@ public class AddActivity extends Activity {
         });
     }
 
-//    @RequiresApi(api = Build.VERSION_CODES.N)
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == REQUEST_CODE) {
-//            if (resultCode == RESULT_OK) {
-//                try {
-//                    uri = data.getData();
-//
-//                    InputStream in = getContentResolver().openInputStream(data.getData());
-//
-//                    Bitmap img = BitmapFactory.decodeStream(in);
-//
-//                    ExifInterface exif = new ExifInterface(getContentResolver().openInputStream(uri));
-//
-//                    in.close();
-//
-//                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-//                    Matrix matrix = new Matrix();
-//                    if (orientation == ExifInterface.ORIENTATION_ROTATE_90) {
-//                        matrix.postRotate(90);
-//                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_180) {
-//                        matrix.postRotate(180);
-//                    } else if (orientation == ExifInterface.ORIENTATION_ROTATE_270) {
-//                        matrix.postRotate(270);
-//                    }
-//
-//                    diaryPhoto.setImageBitmap(img);
-//                } catch (Exception e) {
-//
-//                }
-//            } else if (resultCode == RESULT_CANCELED) {
-//                Toast.makeText(this, "사진 선택 취소", Toast.LENGTH_LONG).show();
-//            }
-//        }
-//    }
-
     android.app.DatePickerDialog.OnDateSetListener datePickerListener = new android.app.DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
@@ -550,8 +508,8 @@ public class AddActivity extends Activity {
 
             diaryYear.setText((year) + "");
 
-            if ((monthOfYear + 1) < 10)
-                diaryMonth.setText("0" + (monthOfYear) + "");
+            if ((monthOfYear) < 10)
+                diaryMonth.setText("0" + (monthOfYear));
             else diaryMonth.setText((dayOfMonth) + "");
 
             if ((dayOfMonth) < 10)

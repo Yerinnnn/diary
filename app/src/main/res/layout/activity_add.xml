@@ -86,7 +86,7 @@
 
                     <TextView
                         android:id="@+id/diaryMonth"
-                        android:layout_width="match_parent"
+                        android:layout_width="100dp"
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/barunhippie"
                         android:text="5"
@@ -163,7 +163,7 @@
                             android:gravity="center"
                             android:text="좋아"
                             android:textColor="@color/color_good"
-                            android:textSize="18sp" />
+                            android:textSize="19sp" />
 
                         <RadioButton
                             android:id="@+id/btn_soso"
@@ -173,7 +173,7 @@
                             android:gravity="center"
                             android:text="그냥 그래"
                             android:textColor="@color/color_soso"
-                            android:textSize="18sp" />
+                            android:textSize="19sp" />
 
                         <RadioButton
                             android:id="@+id/btn_angry"
@@ -183,7 +183,7 @@
                             android:gravity="center"
                             android:text="화나"
                             android:textColor="@color/color_angry"
-                            android:textSize="18sp" />
+                            android:textSize="19sp" />
                     </RadioGroup>
 
                     <RadioGroup
