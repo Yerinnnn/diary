@@ -10,11 +10,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:fontFamily="@font/barunhippie"
+        android:textSize="20sp"
         android:text="2020" />
 
     <TextView
         android:id="@+id/monthlyMonth"
         android:text="9월"
+        android:fontFamily="@font/barunhippie"
+        android:textSize="25sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center" />

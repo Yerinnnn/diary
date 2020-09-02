@@ -229,5 +229,17 @@ public class DbHelper extends SQLiteOpenHelper {
         }
         return list;
     }
+
+    public String dGetFirstYear() {
+        String firstYear = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM diary ORDER BY dMonth DESC;", null);
+
+        while (cursor.moveToNext()) {
+            firstYear = cursor.getString(1);
+        }
+
+        return firstYear;
+    }
 }
 

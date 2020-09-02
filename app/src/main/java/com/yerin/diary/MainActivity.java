@@ -28,7 +28,12 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSetting, btnChart, btnAsc, btnDesc;
     private YearMonthDatePickerDialog yearMonthDatePickerDialog;
 
-    private DiaryAdapter dAdapter;
+//    private DiaryAdapter dAdapter;
+//    private ArrayList<Diary> dList;
+
+    private MonthlyAdapter mAdapter;
+    private ArrayList<Monthly> mList;
+
     private ArrayList<Diary> dList;
 
     private RecyclerView recyclerView;
@@ -107,14 +112,45 @@ public class MainActivity extends AppCompatActivity {
             recyclerView.setVisibility(View.GONE);
         }
 
+        mList = new ArrayList<Monthly>();
+
         // 리사이클러뷰 탑재
+        for (int i = Integer.parseInt(currentYear); i >= 2010 ; i--) {
+            for (int j = 12; j >= 1; j--) {
+                if (j < 10) {
+                    String year, month;
+                    year = Integer.toString(i);
+                    month = Integer.toString(j);
+                    Monthly result = new Monthly(year, "0" + month);
+                    mList.add(result);
+                } else {
+                    String year, month;
+                    year = Integer.toString(i);
+                    month = Integer.toString(j);
+                    Monthly result = new Monthly(year, month);
+                    mList.add(result);
+                }
+            }
+        }
+//        for (int i = Integer.parseInt(currentMonth); i >= 1; i--) {
+//            Monthly result = new Monthly(currentYear, Integer.toString(i));
+//            mList.add(result);
+//        }
+        Log.d(TAG, "onCreate: Monthly result = new Monthly(Integer.toString(i), Integer.toString(j)); " + mList.size());
+
+
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(MainActivity.this, LinearLayoutManager.VERTICAL, false));
         recyclerView.setNestedScrollingEnabled(false);
 
-        dAdapter = new DiaryAdapter(dList);
-        dAdapter.setdContext(MainActivity.this);
-        recyclerView.setAdapter(dAdapter);
+        mAdapter = new MonthlyAdapter(mList);
+        mAdapter.setmContext(MainActivity.this);
+        recyclerView.setAdapter(mAdapter);
+
+
+//        dAdapter = new DiaryAdapter(dList);
+//        dAdapter.setdContext(MainActivity.this);
+//        recyclerView.setAdapter(dAdapter);
 //        recyclerView.scrollToPosition();
 
         new Handler().postDelayed(new Runnable() {
@@ -187,11 +223,24 @@ public class MainActivity extends AppCompatActivity {
                 diaryMonth.setText("0" + (monthOfYear));
             else diaryMonth.setText((dayOfMonth) + "");
 
-            dList = DBHelper.dGetDiaryList(diaryYear.getText().toString(), diaryMonth.getText().toString());
+//            dList = DBHelper.dGetDiaryList(diaryYear.getText().toString(), diaryMonth.getText().toString());
 
-            dAdapter = new DiaryAdapter(dList);
-            recyclerView.setAdapter(dAdapter);
+
+//            for (int i = 1; i <= 12; i++) {
+//                Monthly result = new Monthly(Integer.toString(year), Integer.toString(monthOfYear));
+//                mList.add(result);
+//            }
+
+//            Monthly result = new Monthly(Integer.toString(year), Integer.toString(monthOfYear));
+//            mList.add(result);
+
+            recyclerView.scrollToPosition(monthOfYear);
+
+//            dAdapter = new DiaryAdapter(dList);
+//            recyclerView.setAdapter(dAdapter);
+//            mAdapter = new MonthlyAdapter(mList);
+//            recyclerView.setAdapter(mAdapter);
+
         }
     };
-
 }

@@ -1,6 +1,7 @@
 package com.yerin.diary;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
+
 public class MonthlyAdapter extends RecyclerView.Adapter<MonthlyAdapter.MonthlyViewHolder> {
     private Context mContext;
     private ArrayList<Monthly> mList;
+    private ArrayList<Diary> dList;
 
     public void setmContext(Context context) {
         this.mContext = context;
@@ -26,10 +30,9 @@ public class MonthlyAdapter extends RecyclerView.Adapter<MonthlyAdapter.MonthlyV
     }
 
     public class MonthlyViewHolder extends RecyclerView.ViewHolder {
-        private TextView monthlyYear;
-        private TextView monthlyMonth;
-        private RecyclerView diaryRecyclerview;
-
+        TextView monthlyYear;
+        TextView monthlyMonth;
+        RecyclerView diaryRecyclerview;
 
         public MonthlyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -37,7 +40,6 @@ public class MonthlyAdapter extends RecyclerView.Adapter<MonthlyAdapter.MonthlyV
             monthlyYear = itemView.findViewById(R.id.monthlyYear);
             monthlyMonth = itemView.findViewById(R.id.monthlyMonth);
             diaryRecyclerview = itemView.findViewById(R.id.diaryRecyclerview);
-
         }
     }
 
@@ -57,31 +59,33 @@ public class MonthlyAdapter extends RecyclerView.Adapter<MonthlyAdapter.MonthlyV
 
     @Override
     public void onBindViewHolder(@NonNull MonthlyAdapter.MonthlyViewHolder holder, int position) {
-        final ArrayList<Diary> dList;
-        final DbHelper DBHelper;
 
-        DBHelper = new DbHelper(mContext, "diary", null, 1);
-
+        // 중첩 리사이클러뷰
+        DbHelper DBHelper = new DbHelper(mContext, "diary", null, 1);
         dList = DBHelper.dGetDiaryList(mList.get(position).getmYear(), mList.get(position).getmMonth());
+        Log.d(TAG, "onBindViewHolder: dList.isEmpty(): " + mList.get(position).getmYear() + " " + mList.get(position).getmMonth() + " " + dList.isEmpty());
 
         DiaryAdapter dAdapter = new DiaryAdapter(dList);
-
-        // 리사이클러뷰 탑재
-        MonthlyViewHolder.diaryRecyclerview.setHasFixedSize(true);
-        MonthlyViewHolder.diaryRecyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
-        diaryRecyclerView.setNestedScrollingEnabled(false);
-
-        dAdapter = new DiaryAdapter(dList);
         dAdapter.setdContext(mContext);
-        diaryRecyclerView.setAdapter(dAdapter);
+
+        if (dList.isEmpty() == true) {
+            holder.monthlyYear.setVisibility(View.GONE);
+            holder.monthlyMonth.setVisibility(View.GONE);
+            holder.diaryRecyclerview.setVisibility(View.GONE);
+        }
+
+        // 리사이클러뷰에 어댑터 탑재
+        holder.diaryRecyclerview.setHasFixedSize(true);
+        holder.diaryRecyclerview.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.VERTICAL, false));
+        holder.diaryRecyclerview.setAdapter(dAdapter);
 
         holder.monthlyYear.setText(mList.get(position).getmYear());
         holder.monthlyMonth.setText(mList.get(position).getmMonth());
-        holder.diaryRecyclerview.setAdapter(dAdapter);
+
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mList.size();
     }
 }
