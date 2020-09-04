@@ -9,6 +9,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.time.Month;
 import java.util.ArrayList;
 
 import static android.content.ContentValues.TAG;
@@ -201,7 +202,7 @@ public class DbHelper extends SQLiteOpenHelper {
         int dEmoji;
         String dContent = null;
         String dPhoto = null;
-        ArrayList<Diary> list = new ArrayList<>();
+        ArrayList<Diary> list = new ArrayList<Diary>();
 
         SQLiteDatabase db = getReadableDatabase();
 
@@ -230,16 +231,36 @@ public class DbHelper extends SQLiteOpenHelper {
         return list;
     }
 
-    public String dGetFirstYear() {
-        String firstYear = null;
+    public ArrayList<Monthly> dGetYearMonth() {
+        String mYear = null;
+        String mMonth = null;
+        ArrayList<Monthly> list = new ArrayList<Monthly>();
         SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM diary ORDER BY dMonth DESC;", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM diary GROUP BY dYear, dMonth ORDER BY dMonth DESC;", null);
 
         while (cursor.moveToNext()) {
-            firstYear = cursor.getString(1);
+            mYear = cursor.getString(1);
+            mMonth = cursor.getString(2);
+
+            Monthly results = new Monthly(mYear, mMonth);
+            list.add(results);
+
+            Log.d(TAG, "dGetYearMonth: results.getmYear(): " + results.getmYear() + " " + results.getmMonth());
         }
 
-        return firstYear;
+        return list;
+    }
+
+    public int dGetPosition() {
+        String mYear = null;
+        String mMonth = null;
+        int position;
+
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM diary GROUP BY dYear, dMonth ORDER BY dMonth DESC;", null);
+        position = cursor.getCount();
+
+        return position;
     }
 }
 
